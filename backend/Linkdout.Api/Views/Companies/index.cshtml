@@ -1,0 +1,32 @@
+@{
+    var companies = ViewBag.Companies as List<Linkdout.Api.DTOs.CompanyDto> ?? new();
+    var coverBgs = new[]{"linear-gradient(135deg,#1a1a2e,#3B1F5E)","linear-gradient(135deg,#10B981,#3D6B3C)","linear-gradient(135deg,#5B21B6,#8B5CF6)","linear-gradient(135deg,#F59E0B,#FCD34D)","linear-gradient(135deg,#4A2C5E,#7B4E93)","linear-gradient(135deg,#1A3A4A,#2E6B8A)"};
+}
+<div class="app-layout" style="grid-template-columns:1fr 300px">
+<main>
+  <div class="page-header scroll-reveal">
+    <h1 class="page-title">الشركات</h1>
+    <p class="page-subtitle">اكتشف الشركات، تابع أحدث وظائفها، وتواصل مع فرق العمل</p>
+  </div>
+  <div class="pages-grid">
+    @for (int i = 0; i < companies.Count; i++)
+    {
+      var c = companies[i];
+      <div class="page-card scroll-reveal" onclick="location.href='/Companies/@c.Id'">
+        <div class="group-cover" style="background:@coverBgs[i%6];height:90px"><div class="group-avatar" style="width:52px;height:52px;font-size:1.2rem">@(c.Name?.Length > 0 ? c.Name[0].ToString() : "ش")</div></div>
+        <div class="group-body">
+          <div class="group-name">@c.Name</div>
+          <div class="group-desc">@c.Industry</div>
+          <div style="font-size:0.72rem;display:flex;align-items:center;gap:1rem;margin-top:0.4rem">
+            <span style="color:var(--terracotta);font-weight:600">💼 @c.JobCount وظيفة</span>
+            <span style="color:var(--text-muted)">👥 @c.FollowerCount</span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</main>
+<aside class="sidebar-right">
+  <div class="card scroll-reveal"><div class="card-header"><h3>📊 إحصائيات</h3></div><div style="display:flex;justify-content:space-between;padding:0.5rem 0;font-size:0.85rem"><span style="color:var(--text-secondary)">شركات مسجلة</span><span style="font-family:Amiri,serif;font-weight:700;color:var(--terracotta);font-size:1.1rem">@companies.Count</span></div></div>
+</aside>
+</div>

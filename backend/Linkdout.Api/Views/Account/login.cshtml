@@ -1,0 +1,285 @@
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول — Linkdout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --primary:#7C3AED;--primary-light:#A78BFA;--accent:#06B6D4;
+  --rose:#F43F5E;--emerald:#10B981;--amber:#F59E0B;
+  --bg:#0F0A1A;--bg-card:rgba(255,255,255,0.03);
+  --text:#E2E8F0;--text-secondary:#94A3B8;--text-muted:#64748B;
+  --border:rgba(255,255,255,0.06);--border-focus:rgba(124,58,237,0.3);
+  --radius:16px;--radius-sm:12px;--radius-xs:8px;
+  --transition:0.3s cubic-bezier(0.4,0,0.2,1);
+  --glow:0 0 40px rgba(124,58,237,0.15);
+}
+
+body{
+  font-family:'Inter','Noto Naskh Arabic',sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;display:flex;overflow:hidden;
+  line-height:1.7;
+}
+h1,h2,h3{font-family:'Amiri',serif}
+
+/* Ambient background */
+.ambient{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+}
+.ambient .orb{
+  position:absolute;border-radius:50%;filter:blur(120px);opacity:0.5;
+}
+.ambient .orb-1{width:600px;height:600px;background:rgba(124,58,237,0.15);top:-200px;right:-200px;animation:float 20s ease-in-out infinite}
+.ambient .orb-2{width:500px;height:500px;background:rgba(6,182,212,0.1);bottom:-150px;left:-150px;animation:float 25s ease-in-out infinite reverse}
+.ambient .orb-3{width:400px;height:400px;background:rgba(244,63,94,0.08);top:50%;left:30%;animation:float 18s ease-in-out infinite 5s}
+@@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px) scale(1.05)}66%{transform:translate(-20px,20px) scale(0.95)}}
+
+/* Grid pattern */
+.grid-pattern{
+  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.03;
+  background-image:linear-gradient(rgba(255,255,255,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.1) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+
+/* Split layout */
+.auth-split{display:flex;width:100%;min-height:100vh;position:relative;z-index:1}
+.auth-left{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:3rem;position:relative;overflow:hidden;
+}
+.auth-right{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:3rem;background:rgba(255,255,255,0.015);
+  border-right:1px solid var(--border);
+  position:relative;
+}
+.auth-right::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 70% 50%,rgba(124,58,237,0.08) 0%,transparent 70%);
+}
+
+/* Brand showcase */
+.brand-showcase{text-align:center;max-width:420px}
+.brand-showcase .icon-wrap{
+  width:80px;height:80px;border-radius:24px;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 2rem;font-size:2.2rem;
+  box-shadow:0 0 60px rgba(124,58,237,0.3);
+  animation:iconFloat 3s ease-in-out infinite;
+}
+@@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.brand-showcase h1{
+  font-size:3.5rem;font-weight:700;
+  background:linear-gradient(135deg,#A78BFA 0%,#67E8F9 50%,#C4B5FD 100%);
+  background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;animation:shimmer 3s ease-in-out infinite;
+  margin-bottom:1rem;line-height:1.2;
+}
+@@keyframes shimmer{0%,100%{background-position:0% center}50%{background-position:200% center}}
+.brand-showcase p{font-size:1.1rem;color:var(--text-secondary);line-height:2;margin-bottom:2.5rem}
+.brand-showcase .features-list{display:flex;flex-direction:column;gap:1rem;text-align:right}
+.brand-showcase .feature-item{
+  display:flex;align-items:center;gap:0.8rem;
+  padding:0.8rem 1rem;border-radius:var(--radius);
+  background:rgba(124,58,237,0.04);border:1px solid rgba(124,58,237,0.08);
+  transition:var(--transition);font-size:0.9rem;
+}
+.brand-showcase .feature-item:hover{background:rgba(124,58,237,0.08);border-color:var(--border-focus);transform:translateX(-4px)}
+.brand-showcase .feature-icon{font-size:1.3rem;width:36px;height:36px;border-radius:50%;background:rgba(124,58,237,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* Form container */
+.auth-form-container{width:100%;max-width:420px}
+.auth-form-container .logo-mobile{display:none;text-align:center;margin-bottom:1.5rem}
+.auth-form-container .logo-mobile h2{font-family:'Amiri',serif;font-size:2rem;color:var(--primary)}
+
+/* Tabs */
+.auth-tabs{display:flex;gap:0;margin-bottom:2rem;background:rgba(255,255,255,0.03);border-radius:var(--radius);padding:4px}
+.auth-tab{
+  flex:1;text-align:center;padding:0.7rem 1rem;
+  font-family:'Amiri',serif;font-size:1rem;font-weight:600;
+  color:var(--text-muted);cursor:pointer;
+  border:none;background:none;border-radius:var(--radius-sm);
+  transition:all 0.3s;position:relative;
+}
+.auth-tab.active{background:var(--primary);color:#fff;box-shadow:0 4px 16px rgba(124,58,237,0.4)}
+.auth-tab:hover:not(.active){color:var(--text)}
+
+/* Form */
+.form-group{margin-bottom:1.2rem}
+.form-group label{display:block;font-size:0.82rem;font-weight:500;margin-bottom:0.5rem;color:var(--text-secondary)}
+.form-group .input-wrap{position:relative}
+.form-group .input-wrap .input-icon{
+  position:absolute;right:1rem;top:50%;transform:translateY(-50%);
+  font-size:1.1rem;color:var(--text-muted);pointer-events:none;
+}
+.form-group input{
+  width:100%;padding:0.8rem 2.8rem 0.8rem 1rem;
+  border-radius:var(--radius-sm);border:1.5px solid var(--border);
+  font-family:inherit;font-size:0.9rem;
+  background:rgba(255,255,255,0.03);color:var(--text);
+  transition:all 0.3s;
+}
+.form-group input::placeholder{color:var(--text-muted)}
+.form-group input:focus{
+  outline:none;border-color:var(--primary);
+  background:rgba(124,58,237,0.05);
+  box-shadow:0 0 0 4px rgba(124,58,237,0.08);
+}
+
+.btn-submit{
+  width:100%;padding:0.85rem;border-radius:var(--radius);
+  background:linear-gradient(135deg,var(--primary),#8B5CF6);
+  color:#fff;border:none;
+  font-family:'Amiri',serif;font-size:1.05rem;font-weight:600;cursor:pointer;
+  transition:all 0.35s;margin-top:0.5rem;position:relative;overflow:hidden;
+}
+.btn-submit::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,#8B5CF6,var(--accent));
+  opacity:0;transition:opacity 0.35s;
+}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(124,58,237,0.35)}
+.btn-submit:hover::before{opacity:1}
+.btn-submit:active{transform:scale(0.97)}
+.btn-submit span{position:relative;z-index:1}
+
+.alert{padding:0.7rem 1rem;border-radius:var(--radius-sm);font-size:0.82rem;margin-bottom:1rem;text-align:center}
+.alert-danger{background:rgba(244,63,94,0.08);color:var(--rose);border:1px solid rgba(244,63,94,0.15)}
+.alert-success{background:rgba(16,185,129,0.08);color:var(--emerald);border:1px solid rgba(16,185,129,0.15)}
+
+.hide{display:none!important}
+
+.form-footer{text-align:center;margin-top:1.5rem;font-size:0.8rem;color:var(--text-muted)}
+.form-footer a{color:var(--primary-light);text-decoration:none;transition:var(--transition)}
+.form-footer a:hover{color:var(--accent)}
+
+/* Decorative dots */
+.dots-pattern{
+  position:absolute;top:3rem;right:3rem;
+  width:60px;height:60px;
+  background-image:radial-gradient(rgba(124,58,237,0.2) 2px,transparent 2px);
+  background-size:12px 12px;
+}
+
+@@media (max-width:900px){
+  .auth-split{flex-direction:column}
+  .auth-right{display:none}
+  .auth-left{padding:2rem}
+  .auth-form-container .logo-mobile{display:block}
+  .dots-pattern{display:none}
+}
+</style>
+</head>
+<body>
+<div class="ambient">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="grid-pattern"></div>
+
+<div class="auth-split">
+  <!-- BRAND SIDE -->
+  <div class="auth-right">
+    <div class="dots-pattern"></div>
+    <div class="brand-showcase">
+      <div class="icon-wrap">🦊</div>
+      <h1>Linkdout</h1>
+      <p>شبكتك المهنية المصرية — تواصل مع المحترفين، شارك إنجازاتك، وابني مستقبلك المهني</p>
+      <div class="features-list">
+        <div class="feature-item"><span class="feature-icon">🤝</span><span>تواصل مع محترفين في مجالك</span></div>
+        <div class="feature-item"><span class="feature-icon">⚡</span><span>اكسب نقاط XP وارفع مستواك</span></div>
+        <div class="feature-item"><span class="feature-icon">💼</span><span>اكتشف فرص عمل مناسبة ليك</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM SIDE -->
+  <div class="auth-left">
+    <div class="auth-form-container">
+      <div class="logo-mobile"><h2>🦊 Linkdout</h2></div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab @(ViewBag.ActiveTab == "register" ? "" : "active")" onclick="switchTab('login')">تسجيل الدخول</button>
+        <button class="auth-tab @(ViewBag.ActiveTab == "register" ? "active" : "")" onclick="switchTab('register')">حساب جديد</button>
+      </div>
+
+      @if (ViewBag.Error != null)
+      { <div class="alert alert-danger">@ViewBag.Error</div> }
+
+      <!-- Login -->
+      <div id="tab-login" class="@(ViewBag.ActiveTab == "register" ? "hide" : "")">
+        <form method="post" action="/Account/Login">
+          <div class="form-group">
+            <label>البريد الإلكتروني</label>
+            <div class="input-wrap">
+              <span class="input-icon">📧</span>
+              <input type="email" name="Email" placeholder="example@email.com" required autocomplete="email">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>كلمة المرور</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input type="password" name="Password" placeholder="••••••••" required autocomplete="current-password">
+            </div>
+          </div>
+          <button type="submit" class="btn-submit"><span>🚀 دخول إلى المنصة</span></button>
+        </form>
+      </div>
+
+      <!-- Register -->
+      <div id="tab-register" class="@(ViewBag.ActiveTab == "register" ? "" : "hide")">
+        <form method="post" action="/Account/Register">
+          <div class="form-group">
+            <label>الاسم الكامل</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input type="text" name="FullName" placeholder="محمد أحمد" required autocomplete="name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>البريد الإلكتروني</label>
+            <div class="input-wrap">
+              <span class="input-icon">📧</span>
+              <input type="email" name="Email" placeholder="example@email.com" required autocomplete="email">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>كلمة المرور</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input type="password" name="Password" placeholder="٦ أحرف على الأقل" required minlength="6" autocomplete="new-password">
+            </div>
+          </div>
+          <button type="submit" class="btn-submit"><span>✨ إنشاء حساب جديد</span></button>
+        </form>
+      </div>
+
+      <div class="form-footer">
+        © ٢٠٢٦ <a href="/">Linkdout</a> — الشبكة المهنية المصرية
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(tab){
+  var isReg=tab==='register';
+  document.getElementById('tab-login').classList.toggle('hide',isReg);
+  document.getElementById('tab-register').classList.toggle('hide',!isReg);
+  document.querySelectorAll('.auth-tab')[0].classList.toggle('active',!isReg);
+  document.querySelectorAll('.auth-tab')[1].classList.toggle('active',isReg);
+}
+</script>
+</body>
+</html>

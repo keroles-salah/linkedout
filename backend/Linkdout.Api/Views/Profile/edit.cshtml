@@ -1,0 +1,98 @@
+@{
+    var profile = ViewBag.Profile as Linkdout.Api.DTOs.UserDto;
+    var error = ViewBag.Error as string;
+    var success = ViewBag.Success as string;
+}
+<div class="app-layout" style="grid-template-columns:1fr 300px">
+<main>
+  <div class="page-header scroll-reveal">
+    <h1 class="page-title">تعديل الملف الشخصي</h1>
+    <p class="page-subtitle">حدث معلوماتك، مهاراتك، وحالتك — كل ما تكمل ملفك، فرصك بتزيد</p>
+  </div>
+
+  @if (!string.IsNullOrEmpty(error)) { <div class="alert alert-danger scroll-reveal">⚠️ @error</div> }
+  @if (!string.IsNullOrEmpty(success)) { <div class="alert alert-success scroll-reveal">✅ @success</div> }
+
+  <div class="card scroll-reveal">
+    <form method="post" action="/Profile/Edit">
+      @Html.AntiForgeryToken()
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+        <div class="form-group">
+          <label>👤 الاسم الكامل</label>
+          <input type="text" name="FullName" value="@profile?.FullName" required>
+        </div>
+        <div class="form-group">
+          <label>💼 العنوان الوظيفي</label>
+          <input type="text" name="Headline" value="@profile?.Headline" placeholder="Computer Science Student | AI Enthusiast">
+        </div>
+      </div>
+      
+      <div class="form-group" style="margin-bottom:1rem">
+        <label>📝 نبذة عني</label>
+        <textarea name="Bio" rows="4" placeholder="اكتب نبذة مختصرة عن نفسك، أهدافك، ومجالك...">@profile?.Bio</textarea>
+        <span style="font-size:0.68rem;color:var(--text-muted)">النبذة بتظهر في صفحة ملفك وتساعد الناس تفهم مين انت</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+        <div class="form-group">
+          <label>📍 المدينة</label>
+          <input type="text" name="Location" value="@profile?.Location" placeholder="القاهرة، مصر">
+        </div>
+        <div class="form-group">
+          <label>🌐 الموقع الشخصي</label>
+          <input type="url" name="Website" value="@profile?.Website" placeholder="https://your-site.com">
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:1rem">
+        <label>🛠️ المهارات (افصل بينهم بفاصلة)</label>
+        <input type="text" name="Skills" value="@string.Join(", ", profile?.Skills ?? new())" placeholder="Python, Machine Learning, Web Development, SQL...">
+        <span style="font-size:0.68rem;color:var(--text-muted)">المهارات بتستخدم في مطابقة الوظائف — كل ما تكون أدق، النتايج أحسن</span>
+      </div>
+
+      <div class="form-group" style="margin-bottom:1.5rem">
+        <label>🎯 الحالة المهنية</label>
+        <select name="Status">
+          <option value="open" selected="@(profile?.Status=="open")">🔥 جاهز للتحدي — متاح للفرص الجديدة</option>
+          <option value="growing" selected="@(profile?.Status=="growing")">🌱 في مرحلة نمو — بطور مهاراتي حالياً</option>
+          <option value="available" selected="@(profile?.Status=="available")">🤝 متاح للتعاون — مهتم بالمشاريع المشتركة</option>
+          <option value="learning" selected="@(profile?.Status=="learning")">🧘 في رحلة تعلم — مركز على التعلم دلوقتي</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;padding:0.85rem;font-size:1rem;justify-content:center">
+        ✨ حفظ التغييرات
+      </button>
+    </form>
+  </div>
+</main>
+<aside class="sidebar-right">
+  <div class="card scroll-reveal">
+    <div class="card-header"><h3>💡 نصائح لملف قوي</h3></div>
+    <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.78rem;color:var(--text-secondary);line-height:1.8">
+      <div>✅ أكتب Headline واضح — يوصف مجالك واهتماماتك</div>
+      <div>✅ أضف ٥ مهارات على الأقل — عشان مطابقة الوظائف تشتغل صح</div>
+      <div>✅ اكتب نبذة مختصرة — ٣-٤ جمل عنك وعن أهدافك</div>
+      <div>✅ حط لينك Portfolio أو GitHub لو عندك</div>
+      <div>✅ اختار الحالة المناسبة — عشان تظهر في البحث الصح</div>
+    </div>
+  </div>
+  <div class="card scroll-reveal" style="text-align:center">
+    <p style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:0.5rem">شوف ملفك من وجهة نظر الناس</p>
+    <a href="/Profile" class="btn btn-outline" style="width:100%;justify-content:center">👁️ عرض الملف</a>
+  </div>
+</aside>
+</div>
+
+<style>
+.form-group textarea,.form-group select{
+  width:100%;padding:0.7rem 1rem;border-radius:var(--radius-sm);
+  border:1.5px solid rgba(124,58,237,0.08);font-family:inherit;
+  font-size:0.88rem;background:var(--bg);transition:var(--transition);
+}
+.form-group textarea:focus,.form-group select:focus{
+  outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-bg);
+}
+.form-group textarea{resize:vertical}
+</style>

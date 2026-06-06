@@ -1,0 +1,121 @@
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "إدارة المنشورات";
+    var posts = ViewBag.Posts as List<Linkdout.Api.DTOs.PostDto> ?? new();
+    var totalCount = (int)(ViewBag.TotalCount ?? 0);
+    var page = (int)(ViewBag.Page ?? 1);
+    var search = ViewBag.Search as string;
+    var totalPages = (int)Math.Ceiling(totalCount / 20.0);
+}
+<style>
+:root { --sidebar-w: 260px; }
+.admin-layout { display: flex; min-height: calc(100vh - 60px); }
+.admin-sidebar { width: var(--sidebar-w); min-width: var(--sidebar-w); background: var(--bg-card); border-left: 1px solid var(--border-subtle); padding: 1rem 0; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; }
+.admin-sidebar .logo { padding: 0.5rem 1.5rem 1.5rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 0.8rem; }
+.admin-sidebar .logo h2 { font-family: Amiri, serif; font-size: 1.3rem; color: var(--primary); margin: 0; }
+.admin-nav a { display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 1.5rem; color: var(--text-secondary); text-decoration: none; font-size: 0.88rem; transition: var(--transition); border-right: 3px solid transparent; }
+.admin-nav a:hover, .admin-nav a.active { background: linear-gradient(90deg, rgba(124,58,237,0.08), transparent); color: var(--primary); border-right-color: var(--primary); }
+.admin-nav a .icon { font-size: 1.1rem; width: 22px; text-align: center; }
+.admin-main { flex: 1; padding: 1.5rem 2rem; overflow-x: hidden; }
+.admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
+.admin-header h1 { font-family: Amiri, serif; font-size: 1.6rem; color: var(--text); margin: 0; }
+.chart-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 1.2rem; margin-bottom: 1.5rem; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.data-table th { text-align: right; padding: 0.7rem 0.8rem; background: var(--bg); color: var(--text-muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border-subtle); }
+.data-table td { padding: 0.7rem 0.8rem; border-bottom: 1px solid var(--border-subtle); color: var(--text-secondary); }
+.data-table tr:hover td { background: rgba(124,58,237,0.03); }
+.user-cell { display: flex; align-items: center; gap: 0.6rem; }
+.user-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 0.85rem; font-family: Amiri, serif; }
+.btn-sm { padding: 0.3rem 0.6rem; font-size: 0.72rem; border-radius: 6px; cursor: pointer; border: 1px solid var(--border-subtle); background: transparent; color: var(--text-secondary); transition: var(--transition); }
+.btn-sm:hover { border-color: var(--primary); color: var(--primary); }
+.btn-sm.danger { color: var(--rose); border-color: rgba(244,63,94,0.2); }
+.btn-sm.danger:hover { background: var(--rose); color: #fff; }
+.filter-bar { display: flex; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
+.filter-bar input { padding: 0.5rem 0.8rem; border-radius: 8px; border: 1px solid var(--border-subtle); background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.85rem; min-width: 300px; }
+.filter-bar input:focus { border-color: var(--primary); outline: none; }
+.pagination { display: flex; gap: 0.3rem; justify-content: center; margin-top: 1.5rem; }
+.pagination a, .pagination span { padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.8rem; text-decoration: none; border: 1px solid var(--border-subtle); color: var(--text-secondary); transition: var(--transition); }
+.pagination a:hover { border-color: var(--primary); color: var(--primary); }
+.pagination .current { background: var(--primary); color: #fff; border-color: var(--primary); }
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 0.8rem; margin-bottom: 1.2rem; }
+.stat-mini { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius); padding: 0.8rem 1rem; text-align: center; }
+.stat-mini .num { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+.stat-mini .lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem; }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--bg-card); border: 1px solid var(--border-accent); padding: 0.7rem 1.5rem; border-radius: 12px; box-shadow: var(--shadow-xl); font-size: 0.85rem; color: var(--text); z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+.toast.show { opacity: 1; }
+</style>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="logo"><h2>🦊 Linkdout</h2><span>لوحة تحكم الأدمن</span></div>
+    <nav class="admin-nav">
+      <a href="/Admin"><span class="icon">📊</span> الإحصائيات</a>
+      <a href="/Admin/Users"><span class="icon">👥</span> المستخدمين</a>
+      <a href="/Admin/Posts" class="active"><span class="icon">📝</span> المنشورات</a>
+      <a href="/Admin/Analytics"><span class="icon">📈</span> التحليلات</a>
+      <a href="/" style="margin-top:1rem;border-top:1px solid var(--border-subtle);padding-top:1rem"><span class="icon">🏠</span> العودة للمنصة</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header"><h1>📝 إدارة المنشورات</h1><span style="font-size:0.82rem;color:var(--text-muted)">@totalCount منشور</span></div>
+
+    <div class="stats-row">
+      <div class="stat-mini"><div class="num">@totalCount</div><div class="lbl">إجمالي المنشورات</div></div>
+      <div class="stat-mini"><div class="num">@posts.Sum(p => p.LikeCount)</div><div class="lbl">إجمالي الإعجابات</div></div>
+      <div class="stat-mini"><div class="num">@posts.Sum(p => p.CommentCount)</div><div class="lbl">إجمالي التعليقات</div></div>
+      <div class="stat-mini"><div class="num">@posts.Sum(p => p.ViewCount)</div><div class="lbl">إجمالي المشاهدات</div></div>
+    </div>
+
+    <form class="filter-bar" method="get" action="/Admin/Posts">
+      <input type="text" name="search" value="@search" placeholder="🔍 بحث في المحتوى...">
+      <button type="submit" class="btn-sm" style="background:var(--primary);color:#fff;border:none;">بحث</button>
+    </form>
+
+    <div class="chart-card" style="padding:0;overflow:hidden;">
+      <table class="data-table">
+        <thead><tr><th>الكاتب</th><th>المحتوى</th><th>👍</th><th>💬</th><th>👁️</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+        <tbody>
+        @foreach (var p in posts)
+        {
+          <tr>
+            <td><div class="user-cell"><div class="user-avatar">@(p.AuthorName?[0].ToString() ?? "?")</div>@p.AuthorName</div></td>
+            <td style="max-width:350px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">@(p.Body?.Length > 100 ? p.Body.Substring(0, 100) + "..." : p.Body)</td>
+            <td style="color:var(--rose)">@p.LikeCount</td>
+            <td style="color:var(--accent)">@p.CommentCount</td>
+            <td style="color:var(--text-muted)">@p.ViewCount</td>
+            <td>@p.CreatedAt.ToString("yyyy/MM/dd")</td>
+            <td><button class="btn-sm danger" onclick="deletePost(@p.Id,this)">🗑️ حذف</button></td>
+          </tr>
+        }
+        </tbody>
+      </table>
+    </div>
+
+    @if (totalPages > 1)
+    {
+      <div class="pagination">
+        @for (int i = 1; i <= totalPages; i++)
+        {
+          var qs = $"page={i}";
+          if (!string.IsNullOrEmpty(search)) qs += $"&search={Uri.EscapeDataString(search)}";
+          if (i == page) { <span class="current">@i</span> }
+          else { <a href="?@qs">@i</a> }
+        }
+      </div>
+    }
+
+    <div class="toast" id="toast"></div>
+  </main>
+</div>
+
+<script>
+function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
+function deletePost(id,btn){
+  if(!confirm('حذف هذا المنشور؟ لا يمكن التراجع!'))return;
+  fetch('/Admin/Posts/Delete/'+id,{method:'POST'}).then(r=>r.json()).then(d=>{
+    if(d.ok){btn.closest('tr').remove();showToast('تم الحذف ✓')}
+    else{showToast(d.error)}
+  });
+}
+</script>

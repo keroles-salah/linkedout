@@ -1,0 +1,36 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+.vs/
+*.DotSettings.user
+
+## NuGet
+packages/
+*.nupkg
+
+## Node (if any frontend build)
+node_modules/
+dist/
+.env
+.env.local
+
+## IDE
+.idea/
+*.swp
+*.swo
+*~
+
+## OS
+.DS_Store
+Thumbs.db
+
+## App
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json

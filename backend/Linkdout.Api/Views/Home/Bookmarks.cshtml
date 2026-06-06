@@ -1,0 +1,55 @@
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "المحفوظات";
+    var bookmarks = ViewBag.Bookmarks as List<Linkdout.Api.DTOs.PostDto> ?? new();
+}
+
+<div class="app-layout">
+<main>
+  <div class="admin-header"><h1>🔖 المحفوظات</h1><span style="font-size:0.82rem;color:var(--text-muted)">@bookmarks.Count منشور محفوظ</span></div>
+
+  @if (bookmarks.Count == 0)
+  {
+    <div class="empty-state" style="padding:4rem 2rem;text-align:center">
+      <div class="empty-state-icon" style="font-size:3rem">📌</div>
+      <h3>لا توجد منشورات محفوظة</h3>
+      <p style="color:var(--text-muted);font-size:0.9rem">احفظ المنشورات المهمة عشان ترجع لها لاحقاً</p>
+      <a href="/" class="btn btn-primary" style="margin-top:1rem">تصفح المنشورات</a>
+    </div>
+  }
+
+  @for (int i = 0; i < bookmarks.Count; i++)
+  {
+    var p = bookmarks[i];
+    <div class="card post animate-in" data-post-id="@p.Id" style="animation-delay:@((0.1 + i * 0.03).ToString("0.00"))s">
+      <div class="post-header">
+        <div class="post-avatar">@(p.AuthorName?[0].ToString() ?? "?")</div>
+        <div class="post-header-info">
+          <div class="post-author-name">@p.AuthorName</div>
+          <div class="post-time">@p.CreatedAt.ToString("dd MMM yyyy")</div>
+        </div>
+      </div>
+      <div class="post-body">@(p.Body?.Length > 300 ? p.Body.Substring(0, 300) + "..." : p.Body)</div>
+      <div class="post-stats">
+        <span>👍 @p.LikeCount</span><span>💬 @p.CommentCount</span><span>👁️ @p.ViewCount</span>
+      </div>
+      <div style="padding:0 1.3rem 0.8rem;display:flex;gap:0.5rem">
+        <button class="btn-sm danger" onclick="removeBookmark(@p.Id,this)" style="font-size:0.75rem">🗑️ إزالة</button>
+      </div>
+    </div>
+  }
+</main>
+</div>
+
+<script>
+function removeBookmark(id,btn){
+  fetch('/api/interactions/bookmark/'+id,{method:'POST'}).then(r=>r.json()).then(d=>{
+    if(!d.bookmarked){btn.closest('.post').remove();showToast('تمت الإزالة ✓')}
+  });
+}
+function showToast(m){var t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.className='toast';document.body.appendChild(t)}t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
+</script>
+<style>
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg-card);border:1px solid var(--border-accent);padding:0.7rem 1.5rem;border-radius:12px;box-shadow:var(--shadow-xl);font-size:0.85rem;color:var(--text);z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.toast.show{opacity:1}
+</style>

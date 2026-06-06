@@ -1,0 +1,361 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linkdout — شبكتك المهنية المصرية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --terracotta:#7C3AED;--terracotta-light:#A78BFA;--gold:#06B6D4;--navy:#1E1B4B;
+  --cream:#FBFAF7;--olive:#10B981;--text:#2D2520;--text-secondary:#7A6E64;
+  --radius:16px;--radius-lg:24px;--transition:0.3s cubic-bezier(0.4,0,0.2,1);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Naskh Arabic','Lora',serif;background:var(--cream);color:var(--text);
+  line-height:1.8;overflow-x:hidden;
+}
+h1,h2,h3{font-family:'Amiri','Playfair Display',serif;font-weight:700;line-height:1.3}
+
+/* ═══ HERO ═══ */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#0A0815 0%,#1E1B4B 25%,#3B1F5E 50%,#5B2080 70%,#7C3AED 100%);z-index:0}
+.hero-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 25% 80%,rgba(6,182,212,0.12) 0%,transparent 45%),radial-gradient(ellipse 50% 60% at 80% 25%,rgba(124,58,237,0.08) 0%,transparent 45%),radial-gradient(ellipse 40% 40% at 50% 0%,rgba(255,255,255,0.03) 0%,transparent 50%);z-index:1}
+.hero-particles{position:absolute;inset:0;z-index:2}
+.hero-content{position:relative;z-index:3;max-width:850px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1.5rem;
+  border-radius:50px;background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  color:rgba(255,255,255,0.85);font-size:0.82rem;margin-bottom:2.5rem;
+  border:1px solid rgba(255,255,255,0.1);
+  animation:fadeInUp 0.6s ease-out;
+  box-shadow:0 0 30px rgba(124,58,237,0.2);
+}
+.hero-badge .new-dot{width:7px;height:7px;background:#4ade80;border-radius:50%;animation:newPulse 2s ease-in-out infinite}
+@@keyframes newPulse{0%,100%{opacity:1;box-shadow:0 0 6px #4ade80}50%{opacity:0.5;box-shadow:0 0 14px #4ade80}}
+.hero h1{font-size:clamp(2.8rem,7vw,4.5rem);color:#fff;margin-bottom:1.5rem;animation:fadeInUp 0.7s ease-out 0.1s both;line-height:1.2}
+.hero h1 .highlight{
+  background:linear-gradient(135deg,#A78BFA 0%,#67E8F9 40%,#C4B5FD 70%,#A78BFA 100%);
+  background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;animation:shimmerText 3s ease-in-out infinite;
+}
+@@keyframes shimmerText{0%,100%{background-position:0% center}50%{background-position:200% center}}
+.hero h1 .egypt{color:rgba(255,255,255,0.9)}
+.hero p{font-size:clamp(1.05rem,2vw,1.2rem);color:rgba(255,255,255,0.65);max-width:620px;margin:0 auto 2.8rem;line-height:2;animation:fadeInUp 0.7s ease-out 0.2s both}
+.hero-buttons{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeInUp 0.7s ease-out 0.3s both}
+@@keyframes fadeInUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+.btn-hero{padding:1rem 2.4rem;border-radius:50px;font-family:'Amiri',serif;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);border:none;text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem}
+.btn-hero-primary{
+  background:linear-gradient(135deg,#8B5CF6,#7C3AED);
+  color:#1E1B4B;
+  box-shadow:0 8px 32px rgba(124,58,237,0.35);
+  animation:btnGlow 3s ease-in-out infinite;
+}
+@@keyframes btnGlow{0%,100%{box-shadow:0 8px 32px rgba(124,58,237,0.35)}50%{box-shadow:0 8px 48px rgba(6,182,212,0.5)}}
+.btn-hero-primary:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(124,58,237,0.5);filter:brightness(1.05)}
+.btn-hero-primary:active{transform:scale(0.96)}
+.btn-hero-outline{background:transparent;border:2px solid rgba(255,255,255,0.2);color:#fff;backdrop-filter:blur(4px)}
+.btn-hero-outline:hover{border-color:rgba(255,255,255,0.5);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.2);background:rgba(255,255,255,0.05)}
+
+/* ═══ STATS ═══ */
+.stats-bar{
+  position:relative;display:flex;justify-content:center;gap:5rem;
+  padding:4rem 2rem;background:linear-gradient(180deg,#fff 0%,#FBFAF7 100%);
+  flex-wrap:wrap;z-index:2;
+}
+.stat-item{text-align:center;opacity:0;transform:translateY(30px);transition:all 0.6s ease-out}
+.stat-item.visible{opacity:1;transform:translateY(0)}
+.stat-icon{font-size:2.2rem;margin-bottom:0.5rem}
+.stat-num{font-family:'Amiri',serif;font-size:3rem;font-weight:700;background:linear-gradient(135deg,#7C3AED,#A78BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:0.9rem;color:var(--text-secondary);font-weight:500}
+
+/* ═══ FEATURES ═══ */
+.features{padding:6rem 2rem;max-width:1200px;margin:0 auto;position:relative}
+.features-header{text-align:center;margin-bottom:4rem;opacity:0;transform:translateY(30px);transition:all 0.6s ease-out}
+.features-header.visible{opacity:1;transform:translateY(0)}
+.features-header h2{font-size:2.5rem;margin-bottom:0.8rem;background:linear-gradient(135deg,#7C3AED,#06B6D4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.features-header p{color:var(--text-secondary);font-size:1.05rem;max-width:600px;margin:0 auto}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:2rem}
+.feature-card{
+  background:#fff;padding:2.5rem 2rem;border-radius:var(--radius-lg);
+  box-shadow:0 4px 20px rgba(0,0,0,0.04);transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
+  position:relative;overflow:hidden;cursor:default;
+  opacity:0;transform:translateY(40px);
+}
+.feature-card.visible{opacity:1;transform:translateY(0)}
+.feature-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,#7C3AED,#06B6D4,#A78BFA);
+  background-size:200% 100%;opacity:0;transition:all 0.4s ease;
+}
+.feature-card:hover{transform:translateY(-8px);box-shadow:0 20px 60px rgba(0,0,0,0.08)}
+.feature-card:hover::before{opacity:1;animation:borderSlide 3s linear infinite}
+@@keyframes borderSlide{0%{background-position:0% 0}100%{background-position:200% 0}}
+.feature-icon{
+  width:60px;height:60px;border-radius:16px;
+  background:linear-gradient(135deg,#7C3AED,#A78BFA);
+  display:flex;align-items:center;justify-content:center;font-size:1.6rem;
+  margin-bottom:1.4rem;position:relative;
+}
+.feature-icon::after{
+  content:'';position:absolute;inset:-4px;border-radius:20px;
+  background:linear-gradient(135deg,#7C3AED,transparent);
+  opacity:0;transition:opacity 0.3s ease;
+}
+.feature-card:hover .feature-icon::after{opacity:0.12}
+.feature-card h3{font-size:1.25rem;margin-bottom:0.7rem;color:#1E1B4B}
+.feature-card p{color:var(--text-secondary);font-size:0.9rem;line-height:1.9}
+
+/* ═══ SHOWCASE ═══ */
+.showcase{
+  padding:6rem 2rem;background:linear-gradient(180deg,#1E1B4B 0%,#3B1F5E 40%,#5B21B6 100%);
+  color:#fff;text-align:center;position:relative;overflow:hidden;
+}
+.showcase::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(6,182,212,0.08) 0%,transparent 60%);
+}
+.showcase-content{position:relative;z-index:1;max-width:800px;margin:0 auto}
+.showcase h2{font-size:2.2rem;margin-bottom:1rem}
+.showcase p{color:rgba(255,255,255,0.65);margin-bottom:3rem;font-size:1.05rem}
+.showcase-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;max-width:1000px;margin:0 auto}
+.sc-card{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);
+  border-radius:var(--radius-lg);padding:2rem 1.5rem;text-align:center;
+  backdrop-filter:blur(8px);transition:all 0.4s ease;
+  opacity:0;transform:translateY(30px);
+}
+.sc-card.visible{opacity:1;transform:translateY(0)}
+.sc-card:hover{background:rgba(255,255,255,0.08);transform:translateY(-6px);border-color:rgba(167,139,250,0.25)}
+.sc-card .icon{font-size:2.5rem;margin-bottom:1rem}
+.sc-card h3{font-size:1.1rem;margin-bottom:0.5rem;color:#A78BFA}
+.sc-card p{font-size:0.82rem;color:rgba(255,255,255,0.55);margin:0}
+
+/* ═══ CTA ═══ */
+.cta{
+  padding:6rem 2rem;background:linear-gradient(135deg,#5B21B6 0%,#7C3AED 40%,#4C1D95 100%);
+  text-align:center;color:#fff;position:relative;overflow:hidden;
+}
+.cta::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 30% 50%,rgba(6,182,212,0.12) 0%,transparent 50%),radial-gradient(circle at 70% 30%,rgba(124,58,237,0.08) 0%,transparent 40%);
+}
+.cta-content{position:relative;z-index:1}
+.cta h2{font-size:2.5rem;margin-bottom:1rem;text-shadow:0 2px 10px rgba(0,0,0,0.15)}
+.cta p{font-size:1.1rem;margin-bottom:2.5rem;opacity:0.85;max-width:500px;margin-left:auto;margin-right:auto}
+.cta .btn-hero-primary{
+  font-size:1.2rem;padding:1.1rem 3rem;
+  background:linear-gradient(135deg,#fff,#E8E0F8);
+  color:#7C3AED;box-shadow:0 8px 32px rgba(0,0,0,0.2);
+}
+.cta .btn-hero-primary:hover{box-shadow:0 16px 48px rgba(0,0,0,0.35)}
+
+/* ═══ FOOTER ═══ */
+.footer{
+  background:#0F1123;color:rgba(255,255,255,0.55);padding:4rem 2rem 2rem;
+}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;max-width:1200px;margin:0 auto 3rem}
+.footer-brand .logo{font-family:'Amiri',serif;font-size:1.6rem;color:#A78BFA;font-weight:700;margin-bottom:0.8rem}
+.footer-brand .logo .dot{display:inline-block;width:8px;height:8px;background:#06B6D4;border-radius:50%;margin-right:4px;box-shadow:0 0 12px rgba(6,182,212,0.5)}
+.footer-brand p{font-size:0.85rem;line-height:1.8}
+.footer-col h4{color:#fff;font-size:0.9rem;margin-bottom:1rem;font-family:'Noto Naskh Arabic',serif}
+.footer-col a{display:block;color:rgba(255,255,255,0.45);font-size:0.82rem;margin-bottom:0.5rem;text-decoration:none;transition:color 0.2s}
+.footer-col a:hover{color:#A78BFA}
+.footer-bottom{text-align:center;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.06);font-size:0.78rem;max-width:1200px;margin:0 auto}
+
+/* ═══ NAV LANDING ═══ */
+.nav-landing{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;transition:all 0.3s ease}
+.nav-landing.scrolled{background:rgba(15,17,35,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 4px 30px rgba(0,0,0,0.3)}
+.nav-landing .logo{font-family:'Amiri',serif;font-size:1.4rem;font-weight:700;color:#fff;transition:color 0.3s}
+.nav-landing .logo .dot{display:inline-block;width:8px;height:8px;background:#06B6D4;border-radius:50%;margin-right:4px;box-shadow:0 0 14px rgba(6,182,212,0.6)}
+.nav-landing .nav-actions{display:flex;gap:0.8rem;align-items:center}
+.nav-btn{padding:0.5rem 1.3rem;border-radius:50px;font-family:'Amiri',serif;font-weight:600;cursor:pointer;border:none;font-size:0.92rem;transition:all 0.3s ease;text-decoration:none}
+.nav-btn-login{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.25)}.nav-btn-login:hover{border-color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.05)}
+.nav-btn-register{background:linear-gradient(135deg,#8B5CF6,#7C3AED);color:#1E1B4B}.nav-btn-register:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,58,237,0.35)}
+
+@@media(max-width:768px){
+  .hero{padding:7rem 1.5rem 4rem}.hero h1{font-size:2rem}
+  .stats-bar{gap:2.5rem;padding:3rem 1.5rem}.stat-num{font-size:2.2rem}
+  .features{padding:4rem 1rem}.features h2{font-size:1.8rem}
+  .features-grid{grid-template-columns:1fr}
+  .showcase-cards{grid-template-columns:1fr}
+  .cta{padding:4rem 1.5rem}.cta h2{font-size:1.8rem}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:2rem 1rem}
+  .nav-landing{padding:0.8rem 1.2rem}
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles" class="hero-particles" style="position:absolute;inset:0;z-index:2;display:block"></canvas>
+
+<nav class="nav-landing" id="nav">
+  <div class="logo">Linkdout<span class="dot"></span></div>
+  <div class="nav-actions">
+    <a href="/Account/Login" class="nav-btn nav-btn-login">دخول</a>
+    <a href="/Account/Login" class="nav-btn nav-btn-register">سجل مجاناً</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="new-dot"></span> النسخة التجريبية متاحة الآن</div>
+    <h1>شبكتك المهنية<br><span class="egypt">مش مجرد</span> <span class="highlight">لينكدان</span> <span class="egypt">تاني</span></h1>
+    <p>Linkdout بتبني مجتمع مهني مصري للجونيورز — دوائر للعلاقات، فرص حقيقية، ومحتوى عربي من البداية. مفيش شرط ٥ سنين خبرة.</p>
+    <div class="hero-buttons">
+      <a href="/Account/Login" class="btn-hero btn-hero-primary">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        ابدأ مجاناً
+      </a>
+      <a href="#features" class="btn-hero btn-hero-outline">
+        اكتشف المميزات
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-icon">👥</div><div class="stat-num" data-target="1240">١٬٢٤٠ +</div><div class="stat-label">مستخدم نشط</div></div>
+  <div class="stat-item"><div class="stat-icon">🔗</div><div class="stat-num" data-target="3500">٣٬٥٠٠ +</div><div class="stat-label">علاقة مهنية</div></div>
+  <div class="stat-item"><div class="stat-icon">💼</div><div class="stat-num" data-target="850">٨٥٠ +</div><div class="stat-label">فرصة عمل</div></div>
+  <div class="stat-item"><div class="stat-icon">💬</div><div class="stat-num" data-target="62">٦٢ +</div><div class="stat-label">مجموعة مهنية</div></div>
+</div>
+
+<section class="features" id="features">
+  <div class="features-header"><h2>ليه Linkdout مختلف؟</h2><p>المنصة اتبنت من الصفر حوالين احتياجاتك — مش نسخه من بره</p></div>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon">⭕</div><h3>دوائر ذكية</h3><p>علاقاتك مش "كونيكشنز" بس — نظمهم في دوائر: قريبة، تعلم، ومهنية. كل دايرة ليها محتواها وتفاعلاتها الخاصة.</p></div>
+    <div class="feature-card"><div class="feature-icon">🎯</div><h3>فرص للجونيورز</h3><p>كل فرصة عليها وصف واضح: "جونيور مرحب به"، "تدريب مدفوع"، "بدون خبرة". مفيش تضييع وقت.</p></div>
+    <div class="feature-card"><div class="feature-icon">🏆</div><h3>نظام Gamification</h3><p>XP، مستويات، وشارات تلقائية — كل تفاعل بيزيد مستواك. لوحة متصدرين أسبوعية وشهرية للمنافسة.</p></div>
+    <div class="feature-card"><div class="feature-icon">🤖</div><h3>مطابقة ذكية للوظائف</h3><p>النظام بيقارن مهاراتك مع الوظايف المتاحة ويطلعلك نسبة تطابق — ويقولك إيه المهارات الناقصة.</p></div>
+    <div class="feature-card"><div class="feature-icon">👥</div><h3>مجموعات وصفحات</h3><p>زي المجتمع — مجموعات نقاش مهنية، وصفحات للشركات. مش مجرد static page، مجتمع حي بيتفاعل.</p></div>
+    <div class="feature-card"><div class="feature-icon">🇪🇬</div><h3>عربي من البداية</h3><p>المنصة ١٠٠٪ عربي، RTL native. الخطوط، الألوان، والتجربة كلها مصممة للعالم العربي — مش ترجمة.</p></div>
+  </div>
+</section>
+
+<section class="showcase">
+  <div class="showcase-content">
+    <h2>أرقام بتتكلم</h2>
+    <p>المنصة في طور النمو — والأرقام دي حقيقية من مجتمعنا</p>
+    <div class="showcase-cards">
+      <div class="sc-card"><div class="icon">⚡</div><h3>XP System</h3><p>نظام خبرة كامل — كل تفاعل بيكسبك نقاط وبيوصلك لمستوى أعلى</p></div>
+      <div class="sc-card"><div class="icon">🎖️</div><h3>15 شارة</h3><p>شارات تلقائية بتتمنح على الإنجازات — من أول منشور لأكثر عضو متفاعل</p></div>
+      <div class="sc-card"><div class="icon">📊</div><h3>Leaderboard</h3><p>لوحة متصدرين أسبوعية وشهرية — شوف مين الأكثر نشاطاً في مجتمعك</p></div>
+      <div class="sc-card"><div class="icon">🔍</div><h3>AI Matching</h3><p>ذكاء اصطناعي بيقارن مهاراتك بالوظايف — ويقولك إيه اللي ناقصك</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="cta-content">
+    <h2>جاهز تبني مستقبلك المهني؟</h2>
+    <p>انضم لآلاف المهنيين المصريين اللي بدأوا رحلتهم — مجاناً تماماً</p>
+    <a href="/Account/Login" class="btn-hero btn-hero-primary">🚀 سجل حسابك دلوقتي</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">Linkdout<span class="dot"></span></div>
+      <p>أول شبكة مهنية مصرية مصممة للجونيورز والمبتدئين — مش بس نسخة من لينكدان، ده مجتمع مصري حقيقي.</p>
+    </div>
+    <div class="footer-col">
+      <h4>المنصة</h4>
+      <a href="#features">المميزات</a>
+      <a href="/Account/Login">التسجيل</a>
+      <a href="/Leaderboard">المتصدرين</a>
+      <a href="/Jobs/Match">مطابقة الوظائف</a>
+    </div>
+    <div class="footer-col">
+      <h4>للمطورين</h4>
+      <a href="https://github.com/keroles-salah" target="_blank">GitHub</a>
+      <a href="https://keroles-sala.me" target="_blank">Portfolio</a>
+      <a href="https://www.linkedin.com/in/kerolessalah05/" target="_blank">LinkedIn</a>
+    </div>
+    <div class="footer-col">
+      <h4>تواصل</h4>
+      <a href="mailto:keroles.salah.official@gmail.com">البريد الإلكتروني</a>
+      <a href="https://www.youtube.com/@@kerlssalah" target="_blank">YouTube</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© ٢٠٢٦ Linkdout — صُنع بحب في مصر 🇪🇬 — Keroles Salah Fakhry</div>
+</footer>
+
+<script>
+// ═══ PARTICLE CANVAS ═══
+(function(){
+  var c=document.getElementById('particles'),ctx=c.getContext('2d'),w,h,particles=[];
+  function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight}
+  resize();window.addEventListener('resize',resize);
+  for(var i=0;i<60;i++){
+    particles.push({
+      x:Math.random()*w,y:Math.random()*h,
+      vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,
+      r:Math.random()*2+0.5,alpha:Math.random()*0.5+0.2
+    });
+  }
+  var lines=[];
+  for(var j=0;j<15;j++){lines.push({x1:Math.random()*w,y1:Math.random()*h,x2:Math.random()*w,y2:Math.random()*h,alpha:Math.random()*0.08+0.02})}
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    for(var i=0;i<particles.length;i++){
+      var p=particles[i];
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(167,139,250,'+p.alpha+')';ctx.fill();
+    }
+    for(var j=0;j<lines.length;j++){
+      var l=lines[j];l.x1+=0.05;l.x2-=0.03;
+      if(l.x1>w)l.x1=0;if(l.x2<0)l.x2=w;
+      ctx.beginPath();ctx.moveTo(l.x1,l.y1);ctx.lineTo(l.x2,l.y2);
+      ctx.strokeStyle='rgba(255,255,255,'+l.alpha+')';ctx.lineWidth=0.5;ctx.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ═══ NAV SCROLL ═══
+window.addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50)});
+
+// ═══ SMOOTH SCROLL ═══
+document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var t=document.querySelector(this.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+
+// ═══ SCROLL ANIMATIONS ═══
+var observer=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}});
+},{threshold:0.15});
+document.querySelectorAll('.feature-card,.sc-card,.features-header,.stat-item').forEach(function(el){observer.observe(el)});
+
+// ═══ COUNTER ANIMATION ═══
+(function(){
+  var els=document.querySelectorAll('.stat-num[data-target]');
+  if(!els.length)return;
+  function animate(el){
+    var target=parseInt(el.dataset.target),dur=2000,start=0,inc=target/(dur/16);
+    function update(){start+=inc;if(start<target){el.textContent=Math.floor(start).toLocaleString('ar-EG')+' +';requestAnimationFrame(update)}else{el.textContent=target.toLocaleString('ar-EG')+' +';}}
+    el.textContent='٠';update();
+  }
+  // Start animation after a short delay to let page render
+  setTimeout(function(){els.forEach(function(el){animate(el)})},500);
+  // Also keep observer for when scrolling back
+  var countObs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){animate(e.target);countObs.unobserve(e.target)}});
+  },{threshold:0.1});
+  els.forEach(function(el){countObs.observe(el)});
+})();
+</script>
+</body>
+</html>

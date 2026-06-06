@@ -1,0 +1,48 @@
+@{
+    var g = ViewBag.Group as Linkdout.Api.DTOs.GroupDto;
+    var posts = ViewBag.Posts as List<Linkdout.Api.DTOs.PostDto> ?? new();
+    var isMember = ViewBag.IsMember as bool? == true;
+}
+<div class="app-layout" style="grid-template-columns:1fr 300px">
+<main>
+  <div class="scroll-reveal" style="margin-bottom:1.5rem">
+    <div style="width:100%;height:180px;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--navy) 0%,#3B1F5E 40%,var(--terracotta) 100%);position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,rgba(6,182,212,0.12) 0%,transparent 50%)"></div>
+    </div>
+    <div style="display:flex;align-items:flex-end;gap:1.5rem;margin-top:-50px;padding:0 1.5rem">
+      <div style="width:100px;height:100px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;border:4px solid var(--bg);box-shadow:var(--shadow-lg);background:var(--bg-card)">@(g?.Icon ?? "👥")</div>
+      <div style="padding-bottom:0.3rem;flex:1">
+        <h1 style="font-size:1.6rem;font-family:Amiri,serif">@g?.Name</h1>
+        <p style="color:var(--text-secondary);font-size:0.85rem;margin:0.3rem 0 0.6rem">@g?.Description</p>
+        <div style="display:flex;gap:1.5rem;font-size:0.78rem;color:var(--text-secondary);flex-wrap:wrap">
+          <span>👥 @g?.MemberCount عضو</span><span>💬 @g?.PostCount منشور</span>
+          <span>@(g?.Privacy=="public"?"🌐 عامة":"🔒 خاصة")</span>
+        </div>
+      </div>
+      <button class="btn @(isMember?"btn-outline":"btn-primary") btn-join-group" data-group-id="@g?.Id" style="font-size:0.85rem;flex-shrink:0">@(isMember?"مغادرة":"✨ انضمام")</button>
+    </div>
+  </div>
+
+  @if (posts.Count == 0)
+  {
+    <div class="empty-state scroll-reveal"><div class="empty-state-icon">📝</div><h3>لا توجد منشورات</h3><p>كن أول من يشارك في هذه المجموعة!</p></div>
+  }
+  @foreach (var p in posts)
+  {
+    <div class="card post scroll-reveal" data-post-id="@p.Id">
+      <div class="post-top">
+        <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--terracotta),var(--gold));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-family:Amiri,serif;font-size:1.2rem;flex-shrink:0">@(p.Author.FullName?[0].ToString()??"?")</div>
+        <div><div style="font-weight:600;font-size:0.9rem">@p.Author.FullName</div><div style="font-size:0.75rem;color:var(--text-muted)">@p.Author.Headline</div></div>
+      </div>
+      <div class="post-body">@Html.Raw(p.Body.Replace("\n","<br>"))</div>
+      <div class="post-actions">
+        <button class="post-action ripple @(p.IsLiked?"liked":"")"><svg viewBox="0 0 24 24" width="18" height="18" fill="@(p.IsLiked?"currentColor":"none")" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>@p.LikeCount</span></button>
+        <button class="post-action ripple"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>@p.CommentCount</span></button>
+      </div>
+    </div>
+  }
+</main>
+<aside class="sidebar-right">
+  <div class="card scroll-reveal"><div class="card-header"><h3>📊 عن المجموعة</h3></div><div style="font-size:0.82rem;color:var(--text-secondary);line-height:2">@g?.Description</div></div>
+</aside>
+</div>

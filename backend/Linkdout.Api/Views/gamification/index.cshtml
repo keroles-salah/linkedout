@@ -1,0 +1,83 @@
+@{
+    var leaders = ViewBag.Leaders as IEnumerable<dynamic>;
+    var period = ViewBag.Period as string ?? "all";
+}
+<div class="app-layout" style="grid-template-columns:1fr 300px">
+<main>
+  <div class="page-header scroll-reveal">
+    <h1 class="page-title">🏆 لوحة المتصدرين</h1>
+    <p class="page-subtitle">أكثر الأعضاء نشاطاً وتفاعلاً في Linkdout — @(period=="weekly"?"هذا الأسبوع":period=="monthly"?"هذا الشهر":"كل الأوقات")</p>
+  </div>
+
+  <div class="scroll-reveal" style="display:flex;gap:0.4rem;margin-bottom:1.5rem;background:var(--bg-card);padding:0.35rem;border-radius:var(--radius);backdrop-filter:blur(8px);border:1px solid rgba(192,122,75,0.06)">
+    <a href="/Leaderboard?period=all" class="btn @(period=="all"?"btn-primary":"btn-ghost")" style="flex:1;justify-content:center;font-size:0.8rem">📊 الكل</a>
+    <a href="/Leaderboard?period=weekly" class="btn @(period=="weekly"?"btn-primary":"btn-ghost")" style="flex:1;justify-content:center;font-size:0.8rem">📅 الأسبوع</a>
+    <a href="/Leaderboard?period=monthly" class="btn @(period=="monthly"?"btn-primary":"btn-ghost")" style="flex:1;justify-content:center;font-size:0.8rem">📆 الشهر</a>
+  </div>
+
+  @if (leaders == null || !((IEnumerable<dynamic>)leaders).Any())
+  {
+    <div class="empty-state scroll-reveal">
+      <div class="empty-state-icon">🏆</div>
+      <h3>لا يوجد متصدرين بعد</h3>
+      <p>ابدأ بالتفاعل — انشر، علق، وتواصل مع زمايلك عشان تظهر هنا!</p>
+    </div>
+  }
+  else
+  {
+    int pos = 0;
+    foreach (var u in leaders)
+    {
+      pos++;
+      var medal = pos == 1 ? "🥇" : pos == 2 ? "🥈" : pos == 3 ? "🥉" : $"#{pos}";
+      var isTop3 = pos <= 3;
+      var bg = isTop3 ? "border-color:rgba(224,176,80,0.25)" : "";
+      var badges = new List<string>();
+      try { var bJson = (string)u.Badges; if (!string.IsNullOrEmpty(bJson)) badges = System.Text.Json.JsonSerializer.Deserialize<List<string>>(bJson) ?? new(); } catch { }
+      var level = (int)u.Level;
+      var levelTitle = level <= 1 ? "🌱 مبتدئ" : level <= 3 ? "🌿 متعلم" : level <= 6 ? "🌳 محترف" : level <= 10 ? "⭐ خبير" : level <= 15 ? "👑 قائد" : "🏆 أسطورة";
+      <div class="card scroll-reveal" style="display:flex;align-items:center;gap:1rem;padding:1rem 1.3rem;margin-bottom:0.5rem;cursor:pointer;@bg" onclick="location.href='/Profile/@u.Id'">
+        <div style="font-size:@(isTop3?"2rem":"1.3rem");min-width:44px;text-align:center;font-family:Amiri,serif;font-weight:700">@medal</div>
+        <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--terracotta),var(--gold));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.1rem;flex-shrink:0;border:2px solid @(isTop3?"var(--gold)":"transparent")">@(((string)u.FullName)[0].ToString())</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:0.92rem">@u.FullName</div>
+          <div style="font-size:0.75rem;color:var(--text-muted)">@u.Headline</div>
+          @if (badges.Count > 0) { <div style="display:flex;gap:0.2rem;margin-top:0.25rem;flex-wrap:wrap">@foreach(var b in badges.Take(4)){<span class="badge-pill">@b</span>}@if(badges.Count>4){<span style="font-size:0.6rem;color:var(--text-muted)">+@(badges.Count-4)</span>}</div> }
+        </div>
+        <div style="text-align:center;min-width:70px">
+          <div style="font-family:Amiri,serif;font-weight:700;color:var(--terracotta);font-size:1.15rem">@u.XP</div>
+          <div style="font-size:0.62rem;color:var(--text-muted)">XP</div>
+        </div>
+        <div style="text-align:center;min-width:65px">
+          <div style="font-size:0.78rem;font-weight:500">@levelTitle</div>
+          <div style="font-size:0.6rem;color:var(--text-muted)">Lv.@level</div>
+        </div>
+      </div>
+    }
+  }
+</main>
+<aside class="sidebar-right">
+  <div class="card scroll-reveal">
+    <div class="card-header"><h3>🏅 المستويات</h3></div>
+    <div style="display:flex;flex-direction:column;gap:0.5rem">
+      <div style="display:flex;align-items:center;gap:0.6rem;padding:0.4rem 0.5rem;border-radius:8px;background:var(--bg)"><span style="font-size:1.2rem">🌱</span><div style="flex:1"><div style="font-size:0.78rem;font-weight:500">مبتدئ</div><div style="font-size:0.65rem;color:var(--text-muted)">0–99 XP</div></div><span style="font-size:0.65rem;color:var(--text-muted)">Lv.1</span></div>
+      <div style="display:flex;align-items:center;gap:0.6rem;padding:0.4rem 0.5rem;border-radius:8px;background:var(--bg)"><span style="font-size:1.2rem">🌿</span><div style="flex:1"><div style="font-size:0.78rem;font-weight:500">متعلم</div><div style="font-size:0.65rem;color:var(--text-muted)">100–249 XP</div></div><span style="font-size:0.65rem;color:var(--text-muted)">Lv.2–3</span></div>
+      <div style="display:flex;align-items:center;gap:0.6rem;padding:0.4rem 0.5rem;border-radius:8px;background:var(--bg)"><span style="font-size:1.2rem">🌳</span><div style="flex:1"><div style="font-size:0.78rem;font-weight:500">محترف</div><div style="font-size:0.65rem;color:var(--text-muted)">250–499 XP</div></div><span style="font-size:0.65rem;color:var(--text-muted)">Lv.4–6</span></div>
+      <div style="display:flex;align-items:center;gap:0.6rem;padding:0.4rem 0.5rem;border-radius:8px;background:var(--bg)"><span style="font-size:1.2rem">⭐</span><div style="flex:1"><div style="font-size:0.78rem;font-weight:500">خبير</div><div style="font-size:0.65rem;color:var(--text-muted)">500–999 XP</div></div><span style="font-size:0.65rem;color:var(--text-muted)">Lv.7–10</span></div>
+      <div style="display:flex;align-items:center;gap:0.6rem;padding:0.4rem 0.5rem;border-radius:8px;background:var(--bg)"><span style="font-size:1.2rem">👑</span><div style="flex:1"><div style="font-size:0.78rem;font-weight:500">قائد</div><div style="font-size:0.65rem;color:var(--text-muted)">1000–2499 XP</div></div><span style="font-size:0.65rem;color:var(--text-muted)">Lv.11–15</span></div>
+      <div style="display:flex;align-items:center;gap:0.6rem;padding:0.4rem 0.5rem;border-radius:8px;background:var(--bg)"><span style="font-size:1.2rem">🏆</span><div style="flex:1"><div style="font-size:0.78rem;font-weight:500">أسطورة</div><div style="font-size:0.65rem;color:var(--text-muted)">2500+ XP</div></div><span style="font-size:0.65rem;color:var(--text-muted)">Lv.16+</span></div>
+    </div>
+  </div>
+  <div class="card scroll-reveal">
+    <div class="card-header"><h3>💡 ازاي تكسب XP؟</h3></div>
+    <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:0.78rem;color:var(--text-secondary)">
+      <div style="display:flex;align-items:center;gap:0.5rem;padding:0.3rem 0.5rem;border-radius:8px;background:var(--bg)"><span style="font-size:1rem">📝</span><span style="flex:1">منشور جديد</span><span style="font-weight:600;color:var(--terracotta)">+10</span></div>
+      <div style="display:flex;align-items:center;gap:0.5rem;padding:0.3rem 0.5rem;border-radius:8px;background:var(--bg)"><span style="font-size:1rem">💬</span><span style="flex:1">تعليق</span><span style="font-weight:600;color:var(--terracotta)">+3</span></div>
+      <div style="display:flex;align-items:center;gap:0.5rem;padding:0.3rem 0.5rem;border-radius:8px;background:var(--bg)"><span style="font-size:1rem">❤️</span><span style="flex:1">إعجاب</span><span style="font-weight:600;color:var(--terracotta)">+2</span></div>
+      <div style="display:flex;align-items:center;gap:0.5rem;padding:0.3rem 0.5rem;border-radius:8px;background:var(--bg)"><span style="font-size:1rem">🔁</span><span style="flex:1">مشاركة</span><span style="font-weight:600;color:var(--terracotta)">+5</span></div>
+      <div style="display:flex;align-items:center;gap:0.5rem;padding:0.3rem 0.5rem;border-radius:8px;background:var(--bg)"><span style="font-size:1rem">🤝</span><span style="flex:1">علاقة جديدة</span><span style="font-weight:600;color:var(--terracotta)">+7</span></div>
+      <div style="display:flex;align-items:center;gap:0.5rem;padding:0.3rem 0.5rem;border-radius:8px;background:var(--bg)"><span style="font-size:1rem">👥</span><span style="flex:1">انضمام مجموعة</span><span style="font-weight:600;color:var(--terracotta)">+5</span></div>
+    </div>
+  </div>
+</aside>
+</div>

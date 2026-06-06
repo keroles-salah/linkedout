@@ -1,0 +1,331 @@
+@{
+    var myProfile = ViewBag.MyProfile as Linkdout.Api.DTOs.UserDto;
+    var circles = ViewBag.Circles as IEnumerable<dynamic>;
+    var posts = ViewBag.Posts as List<Linkdout.Api.DTOs.PostDto> ?? new();
+    var jobs = ViewBag.Opportunities as List<Linkdout.Api.DTOs.JobDto> ?? new();
+    var suggestions = ViewBag.Suggestions as List<Linkdout.Api.DTOs.UserBriefDto> ?? new();
+    var statusText = myProfile?.Status switch { "open" => "🔥 جاهز للتحدي", "growing" => "🌱 في مرحلة نمو", "available" => "🤝 متاح للتعاون", "learning" => "🧘 في رحلة تعلم", _ => "🔥 جاهز للتحدي" };
+    var statusClass = myProfile?.Status == "learning" ? "learning" : "open";
+}
+<div class="app-layout">
+<aside class="sidebar-left">
+  <div class="card profile-card animate-in">
+    <div class="cover"></div>
+    <div class="avatar-wrap">
+      <div class="avatar" style="background:linear-gradient(135deg,var(--terracotta),var(--gold));display:flex;align-items:center;justify-content:center;color:#fff;font-size:2rem;font-family:Amiri,serif">@(myProfile?.FullName?[0].ToString() ?? "ك")</div>
+    </div>
+    <h3>@myProfile?.FullName</h3>
+    <p class="headline">@myProfile?.Headline</p>
+    @{
+        var lvl = myProfile?.Level ?? 1;
+        var lvlTitle = lvl <= 1 ? "🌱 مبتدئ" : lvl <= 3 ? "🌿 متعلم" : lvl <= 6 ? "🌳 محترف" : lvl <= 10 ? "⭐ خبير" : lvl <= 15 ? "👑 قائد" : "🏆 أسطورة";
+    }
+    <div style="display:flex;align-items:center;gap:0.4rem;justify-content:center;margin:0.3rem 0 0.6rem">
+      <span style="font-size:0.7rem;background:var(--terracotta-bg);color:var(--terracotta);padding:0.15rem 0.6rem;border-radius:10px">Lv.@lvl @lvlTitle</span>
+      <span style="font-size:0.65rem;color:var(--text-muted)">@(myProfile?.XP ?? 0) XP</span>
+    </div>
+    @if (myProfile?.Badges?.Count > 0) {
+      <div style="display:flex;gap:0.2rem;flex-wrap:wrap;justify-content:center;margin-bottom:0.4rem">
+        @foreach (var b in myProfile.Badges.Take(4)) { <span style="font-size:0.65rem;background:var(--gold-bg);padding:0.1rem 0.4rem;border-radius:6px">@b</span> }
+        @if (myProfile.Badges.Count > 4) { <span style="font-size:0.6rem;color:var(--text-muted)">+@(myProfile.Badges.Count - 4)</span> }
+      </div>
+    }
+    <span class="status-badge @statusClass">@statusText</span>
+    <div class="profile-stats">
+      <div class="profile-stat"><div class="num">@(myProfile?.ConnectionCount ?? 0)</div><div class="lbl">علاقة</div></div>
+      <div class="profile-stat"><div class="num">0</div><div class="lbl">خبرة</div></div>
+      <div class="profile-stat"><div class="num">@(myProfile?.ProfileViews ?? 0)</div><div class="lbl">مشاهدة</div></div>
+    </div>
+  </div>
+  <div class="card animate-in">
+    <div class="card-header"><h3>دوائري</h3><a href="/Circles" style="font-size:0.75rem;color:var(--terracotta)">عرض الكل</a></div>
+    @foreach (var c in circles ?? Enumerable.Empty<dynamic>())
+    {
+        var circleRaw = (string)c.Circle;
+        var circleName = circleRaw == "close" ? "الدائرة القريبة" : circleRaw == "learning" ? "دائرة التعلم" : circleRaw == "professional" ? "الدائرة المهنية" : "دائرة " + circleRaw;
+        var dotClass = circleRaw == "close" ? "close" : circleRaw == "learning" ? "learn" : "professional";
+        <div class="circle-item"><div class="circle-dot @dotClass"></div><div style="flex:1"><div style="font-size:0.85rem;font-weight:500">@circleName</div><div style="font-size:0.7rem;color:var(--text-muted)">@c.Count شخص</div></div></div>
+    }
+  </div>
+</aside>
+
+<main>
+  <div class="skeleton-card skeleton"></div>
+  <div class="skeleton-card skeleton"></div>
+  <div class="skeleton-card skeleton" style="height:100px"></div>
+
+  <div class="card composer animate-in">
+    <div style="display:flex;align-items:center;gap:0.8rem">
+      <div style="width:44px;height:44px;border-radius:50%;background:var(--terracotta);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-family:Amiri,serif;font-size:1.2rem;flex-shrink:0">@(myProfile?.FullName?[0].ToString() ?? "ك")</div>
+      <div role="button" style="flex:1;text-align:right;background:var(--bg);padding:0.7rem 1rem;border-radius:var(--radius);color:var(--text-muted);font-size:0.85rem;cursor:pointer" onclick="document.querySelector('.fab')?.click()">شارك إنجاز، فكرة، أو فرصة...</div>
+    </div>
+  </div>
+
+  @if (posts.Count == 0)
+  {
+    <div class="empty-state animate-in">
+      <div class="empty-state-icon">📝</div>
+      <h3>لا توجد منشورات بعد</h3>
+      <p>ابدأ بإنشاء أول منشور لك — شارك فكرة، إنجاز، أو سؤال مهني</p>
+      <button class="btn btn-primary ripple" style="margin-top:1rem" onclick="document.querySelector('.fab')?.click()">إنشاء منشور</button>
+    </div>
+  }
+
+  <!-- STORIES BAR -->
+  <div class="stories-bar scroll-reveal" id="stories-bar" style="display:flex;gap:0.8rem;overflow-x:auto;padding:0.5rem 0;margin-bottom:0.8rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none">
+    <div class="story-item" style="flex-shrink:0;text-align:center;cursor:pointer" onclick="document.querySelector('.fab')?.click()">
+      <div style="width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;margin:0 auto 0.3rem;box-shadow:0 0 0 3px var(--bg),0 0 0 5px rgba(124,58,237,0.15);font-size:1.5rem">➕</div>
+      <span style="font-size:0.68rem;color:var(--text-muted)">قصتك</span>
+    </div>
+  </div>
+
+  <!-- FEED FILTER TABS -->
+  <div style="display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap" class="feed-filters">
+    <button class="feed-filter-btn active" onclick="filterFeed('all',this)" style="padding:0.4rem 1rem;border-radius:20px;border:1.5px solid var(--border-subtle);background:var(--bg-card);color:var(--text);font-family:inherit;font-size:0.8rem;cursor:pointer;transition:var(--transition)">📋 الكل</button>
+    <button class="feed-filter-btn" onclick="filterFeed('text',this)" style="padding:0.4rem 1rem;border-radius:20px;border:1.5px solid var(--border-subtle);background:transparent;color:var(--text-muted);font-family:inherit;font-size:0.8rem;cursor:pointer;transition:var(--transition)">📝 نصوص</button>
+    <button class="feed-filter-btn" onclick="filterFeed('images',this)" style="padding:0.4rem 1rem;border-radius:20px;border:1.5px solid var(--border-subtle);background:transparent;color:var(--text-muted);font-family:inherit;font-size:0.8rem;cursor:pointer;transition:var(--transition)">📷 صور</button>
+    <button class="feed-filter-btn" onclick="filterFeed('polls',this)" style="padding:0.4rem 1rem;border-radius:20px;border:1.5px solid var(--border-subtle);background:transparent;color:var(--text-muted);font-family:inherit;font-size:0.8rem;cursor:pointer;transition:var(--transition)">📊 استطلاعات</button>
+  </div>
+  @for (int i = 0; i < posts.Count; i++)
+  {
+    var p = posts[i];
+    <div class="card post animate-in" data-post-id="@p.Id" style="animation-delay:@((0.15 + i * 0.05).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture))s">
+      <div class="post-header">
+        <div class="post-avatar" data-user-id="@p.Author.Id">@(p.Author.FullName?[0].ToString() ?? "?")</div>
+        <div class="post-header-info">
+          <div class="post-author-name" data-user-id="@p.Author.Id">
+            @p.Author.FullName
+            @if (p.Author.Headline?.Length > 5) { <span class="verified">✓</span> }
+          </div>
+          @if (!string.IsNullOrEmpty(p.Author.Headline))
+          { <div class="post-author-headline">@p.Author.Headline</div> }
+          <div class="post-time">
+            <span class="js-relative-time" data-time="@p.CreatedAt.ToString("o")">@p.CreatedAt.ToString("dd MMM")</span>
+            @if (p.IsEdited) { <span class="dot"></span> <span style="color:var(--amber);font-size:0.65rem">مُعدّل</span> }
+            @if (p.ViewCount > 0) { <span class="dot"></span> <span>👁️ @p.ViewCount مشاهدة</span> }
+          </div>
+        </div>
+        <button class="post-menu-btn" title="المزيد">⋯</button>
+      </div>
+
+      <div class="post-body">@Html.Raw(p.Body.Replace("\n", "<br>"))</div>
+
+      @if (p.Poll != null)
+      {
+        var pollJson = System.Text.Json.JsonSerializer.Serialize(p.Poll);
+        var pollDoc = System.Text.Json.JsonDocument.Parse(pollJson).RootElement;
+        var hasResults = pollDoc.TryGetProperty("results", out _);
+        var pollQuestion = pollDoc.GetProperty("question").GetString();
+        var pollOptions = pollDoc.GetProperty("options").EnumerateArray().Select(o => o.GetString()).ToList();
+        var pollVotes = pollDoc.GetProperty("votes").EnumerateArray().Select(v => v.GetInt32()).ToArray();
+        var totalVotes = pollVotes.Sum();
+        <div class="poll-widget" data-post-id="@p.Id" style="margin:0 1.3rem 0.8rem;background:var(--bg);border-radius:var(--radius);padding:1rem;border:1px solid var(--border-subtle)">
+          <div style="font-weight:600;font-size:0.9rem;margin-bottom:0.8rem">📊 @pollQuestion</div>
+          @if (hasResults)
+          {
+            var results = pollDoc.GetProperty("results").EnumerateArray().ToList();
+            @foreach (var r in results)
+            {
+              var opt = r.GetProperty("option").GetString();
+              var pct = r.GetProperty("percent").GetDouble();
+              <div style="margin-bottom:0.5rem">
+                <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:0.2rem"><span>@opt</span><span style="color:var(--primary);font-weight:600">@pct%</span></div>
+                <div style="height:8px;background:var(--border-subtle);border-radius:4px;overflow:hidden"><div style="height:100%;width:@(pct)%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:4px;transition:width 0.5s ease"></div></div>
+              </div>
+            }
+          }
+          else
+          {
+            @for (int oi = 0; oi < pollOptions.Count; oi++)
+            {
+              <button class="poll-option-btn" onclick="votePoll(@p.Id,@oi,this)" style="width:100%;text-align:right;padding:0.6rem 0.8rem;margin-bottom:0.4rem;border-radius:10px;border:1.5px solid var(--border-subtle);background:transparent;font-family:inherit;font-size:0.82rem;cursor:pointer;transition:var(--transition);color:var(--text)">@pollOptions[oi]</button>
+            }
+          }
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.4rem">إجمالي الأصوات: @totalVotes</div>
+        </div>
+      }
+    }
+
+      @if (p.Images?.Count > 0)
+      {
+        var imgCount = p.Images.Count;
+        var galleryClass = imgCount == 1 ? "single" : imgCount == 2 ? "double" : "triple";
+        <div class="post-gallery @galleryClass">
+          @foreach (var img in p.Images.Take(3))
+          {
+            <img src="@img" alt="صورة" loading="lazy" onerror="this.style.display='none'">
+          }
+        </div>
+      }
+
+      @if (p.Tags?.Count > 0)
+      {
+        <div class="post-tags">
+          @foreach (var t in p.Tags) { <span class="post-tag">#@t</span> }
+        </div>
+      }
+
+      <div class="post-stats">
+        @if (p.LikeCount > 0) { <span><span class="stat-icon">👍</span> @p.LikeCount إعجاب</span> }
+        @if (p.CommentCount > 0) { <span><span class="stat-icon">💬</span> @p.CommentCount تعليق</span> }
+        @if (p.ShareCount > 0) { <span><span class="stat-icon">🔄</span> @p.ShareCount مشاركة</span> }
+      </div>
+
+      <div class="post-actions">
+        <button class="post-action ripple @(p.IsLiked ? "liked" : "")" data-action="like" data-post-react="@p.Id">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="@(p.IsLiked?"currentColor":"none")" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="action-label">إعجاب</span><span>@p.LikeCount</span>
+        </button>
+        <button class="post-action ripple" data-action="comment">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="action-label">تعليق</span><span>@p.CommentCount</span>
+        </button>
+        <button class="post-action ripple" data-action="share" data-share-id="@p.Id">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          <span class="action-label">مشاركة</span>
+        </button>
+        <button class="post-action ripple" data-action="bookmark" data-bookmark-id="@p.Id">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <span class="action-label">حفظ</span>
+        </button>
+      </div>
+    </div>
+  }
+  @if (ViewBag.HasMore != null && (bool)ViewBag.HasMore)
+  {
+    <div style="text-align:center;padding:1rem 0" data-has-more="true">
+      <a href="/?page=@(ViewBag.Page + 1)" class="btn btn-outline" style="min-width:200px">📥 عرض المزيد</a>
+    </div>
+  } else { <div data-has-more="false" style="display:none"></div> }
+</main>
+
+<aside class="sidebar-right">
+  <div class="card animate-in">
+    <div class="card-header"><h3>✨ فرص متاحة</h3><a href="/Opportunities" style="font-size:0.75rem;color:var(--terracotta)">عرض الكل</a></div>
+    @foreach (var j in jobs.Take(4))
+    {
+      <div style="padding:0.7rem;border-radius:12px;cursor:pointer;transition:var(--transition);margin-bottom:0.2rem" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+        <div style="font-size:0.7rem;color:var(--text-muted)">@j.CompanyName</div>
+        <div style="font-size:0.85rem;font-weight:500;margin:0.15rem 0">@j.Title</div>
+        <div style="font-size:0.7rem;color:var(--terracotta)">@j.Type · @j.Location</div>
+      </div>
+    }
+  </div>
+  <div class="card animate-in" style="animation-delay:0.05s">
+    <div class="card-header"><h3>🔥 الأكثر تداولاً</h3></div>
+    <div id="trending-tags" style="display:flex;flex-wrap:wrap;gap:0.4rem;padding:0.3rem 0">
+      <span style="font-size:0.75rem;color:var(--text-muted)">⏳ جاري التحميل...</span>
+    </div>
+  </div>
+  <div class="card animate-in" style="animation-delay:0.1s">
+    <div class="card-header"><h3>👥 قد تعرفهم</h3></div>
+    @foreach (var s in suggestions.Take(4))
+    {
+      <div style="display:flex;align-items:center;gap:0.6rem;padding:0.4rem 0">
+        <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--terracotta),var(--gold));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.85rem;flex-shrink:0">@(s.FullName?[0].ToString() ?? "?")</div>
+        <div style="flex:1;min-width:0"><div style="font-size:0.82rem;font-weight:500">@s.FullName</div><div style="font-size:0.7rem;color:var(--text-muted)">@s.Headline</div></div>
+        <a href="/Profile/@s.Id" style="padding:0.3rem 0.8rem;border-radius:16px;font-size:0.72rem;border:1.5px solid var(--terracotta);color:var(--terracotta)">عرض</a>
+        <button class="btn-connect" data-user-id="@s.Id" style="padding:0.3rem 0.8rem;border-radius:16px;font-size:0.72rem;border:1.5px solid var(--olive);color:var(--olive);background:none;cursor:pointer;font-family:inherit">تواصل</button>
+      </div>
+    }
+  </div>
+</aside>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('.skeleton').forEach(function(s){s.style.display='none'});
+
+  // Load stories
+  fetch('/api/interactions/stories').then(r=>r.json()).then(users=>{
+    if(!users||users.length===0)return;
+    var bar=document.getElementById('stories-bar');
+    users.forEach(function(u){
+      var item=document.createElement('div');item.className='story-item';
+      item.style.cssText='flex-shrink:0;text-align:center;cursor:pointer;scroll-snap-align:start';
+      item.innerHTML='<div style=\"width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,'+u.color||'#7C3AED'+','+u.color||'#06B6D4'+');display:flex;align-items:center;justify-content:center;margin:0 auto 0.3rem;box-shadow:0 0 0 3px var(--bg),0 0 0 5px '+u.color||'rgba(124,58,237,0.2)'+';font-size:1.5rem;color:#fff;font-weight:700;font-family:Amiri,serif\">'+(u.name||'?')[0]+'<\/div><span style=\"font-size:0.68rem;color:var(--text);max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block\">'+(u.name||'')+'<\/span>';
+      item.onclick=function(){window.location.href='/Profile/'+u.id};
+      bar.appendChild(item);
+    });
+  });
+  // Trending hashtags
+  fetch('/api/interactions/trending').then(r=>r.json()).then(tags=>{
+    var el=document.getElementById('trending-tags');
+    if(!tags||tags.length===0){el.innerHTML='<span style="font-size:0.75rem;color:var(--text-muted)">لا توجد هاشتاقات رائجة</span>';return}
+    var colors=['var(--primary)','var(--accent)','var(--emerald)','var(--amber)','var(--rose)'];
+    el.innerHTML=tags.slice(0,8).map(function(t,i){
+      return '<a href="/Search?q='+encodeURIComponent(t.tag)+'" style="padding:0.35rem 0.75rem;border-radius:20px;font-size:0.72rem;font-weight:500;text-decoration:none;background:'+colors[i%5]+'15;color:'+colors[i%5]+';border:1px solid '+colors[i%5]+'20;transition:all 0.25s" onmouseover="this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 4px 12px '+colors[i%5]+'20\'" onmouseout="this.style.transform=\'\';this.style.boxShadow=\'\'">#'+t.tag+' <span style="opacity:0.6;font-size:0.65rem">'+t.count+'</span></a>'
+    }).join('');
+  });
+});
+
+// Service Worker (PWA)
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/sw.js').catch(function(){});
+}
+
+// Feed filtering
+window.filterFeed=function(type,btn){
+  document.querySelectorAll('.feed-filter-btn').forEach(function(b){b.classList.remove('active');b.style.background='transparent';b.style.color='var(--text-muted)'});
+  btn.classList.add('active');btn.style.background='var(--bg-card)';btn.style.color='var(--text)';
+  document.querySelectorAll('.post').forEach(function(p){
+    var hasImages=p.querySelector('.post-gallery');
+    var hasPoll=p.querySelector('.poll-widget');
+    if(type==='all'){p.style.display=''}
+    else if(type==='images'){p.style.display=hasImages?'':'none'}
+    else if(type==='polls'){p.style.display=hasPoll?'':'none'}
+    else if(type==='text'){p.style.display=!hasImages&&!hasPoll?'':'none'}
+  });
+};
+
+// Link Preview + YouTube Embed
+document.querySelectorAll('.post-body').forEach(function(el){
+  var html=el.innerHTML;
+  // YouTube embed
+  var ytMatch=html.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+  if(ytMatch){
+    var iframe=document.createElement('div');
+    iframe.style.cssText='position:relative;padding-bottom:56.25%;margin-top:0.6rem;border-radius:var(--radius);overflow:hidden';
+    iframe.innerHTML='<iframe src=\"https://www.youtube.com/embed/'+ytMatch[1]+'\" style=\"position:absolute;inset:0;width:100%;height:100%;border:0\" allowfullscreen></iframe>';
+    el.appendChild(iframe);
+    return;
+  }
+  // Link preview
+  var urlMatch=html.match(/https?:\/\/[^\s<>"]+/);
+  if(!urlMatch)return;
+  var url=urlMatch[0];
+  fetch('/api/interactions/link-preview?url='+encodeURIComponent(url)).then(r=>r.json()).then(d=>{
+    if(!d.title)return;
+    var card=document.createElement('a');
+    card.href=url;card.target='_blank';card.rel='noopener';
+    card.style.cssText='display:flex;gap:0.8rem;padding:0.8rem;margin-top:0.6rem;border-radius:var(--radius);border:1px solid var(--border-subtle);text-decoration:none;background:var(--bg);transition:var(--transition)';
+    card.onmouseover=function(){this.style.borderColor='var(--primary)'};
+    card.onmouseout=function(){this.style.borderColor='var(--border-subtle)'};
+    card.innerHTML='<div style=\"flex:1;min-width:0\"><div style=\"font-weight:600;font-size:0.82rem;color:var(--text);margin-bottom:0.2rem\">'+(d.title||'')+'</div><div style=\"font-size:0.7rem;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical\">'+(d.description||'')+'</div><div style=\"font-size:0.65rem;color:var(--primary);margin-top:0.3rem\">'+new URL(url).hostname+'</div></div>'+(d.image?'<img src=\"'+d.image+'\" style=\"width:80px;height:80px;border-radius:10px;object-fit:cover;flex-shrink:0\">':'');
+    el.appendChild(card);
+  }).catch(function(){});
+});
+
+// Notification polling every 30s
+function pollNotifications(){
+  fetch('/api/notifications/count').then(r=>r.json()).then(d=>{
+    var badge=document.getElementById('notif-badge');
+    if(d.count>0){
+      if(badge){badge.style.display='flex';badge.textContent=d.count}
+      var prev=parseInt(sessionStorage.getItem('lastNotifCount')||'0');
+      if(d.count>prev&&prev>0)showToast('🔔 لديك '+d.count+' إشعارات جديدة!');
+      sessionStorage.setItem('lastNotifCount',d.count);
+    }else{if(badge)badge.style.display='none'}
+  });
+}
+pollNotifications();setInterval(pollNotifications,30000);
+
+// Toast (if not defined elsewhere)
+if(typeof showToast==='undefined'){
+  window.showToast=function(m){
+    var t=document.getElementById('toast');
+    if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg-card);border:1px solid var(--primary);padding:0.7rem 1.5rem;border-radius:12px;box-shadow:var(--shadow-xl);font-size:0.85rem;color:var(--text);z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none';document.body.appendChild(t)}
+    t.textContent=m;t.classList.add('show');t.style.opacity='1';setTimeout(function(){t.style.opacity='0'},3000);
+  };
+}
+</script>

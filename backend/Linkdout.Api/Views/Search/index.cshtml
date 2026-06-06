@@ -1,0 +1,88 @@
+@{
+    var people = ViewBag.People as List<Linkdout.Api.DTOs.UserDto> ?? new();
+    var jobs = ViewBag.Jobs as List<Linkdout.Api.DTOs.JobDto> ?? new();
+    var groups = ViewBag.Groups as List<Linkdout.Api.DTOs.GroupDto> ?? new();
+    var companies = ViewBag.Companies as List<Linkdout.Api.DTOs.CompanyDto> ?? new();
+    var q = ViewBag.Query as string ?? "";
+    var hasResults = (people.Count + jobs.Count + groups.Count + companies.Count) > 0;
+    var searched = !string.IsNullOrEmpty(q);
+}
+<div class="app-layout" style="grid-template-columns:1fr 300px">
+<main>
+  <div class="scroll-reveal" style="padding:1.5rem 0">
+    <form method="get" action="/Search" style="position:relative;max-width:640px;margin:0 auto">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--text-muted);width:20px;height:20px"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input name="q" value="@q" placeholder="ابحث عن أشخاص، وظائف، مجموعات، شركات..." style="width:100%;padding:0.9rem 1.2rem 0.9rem 3rem;border-radius:16px;border:2px solid rgba(192,122,75,0.1);background:var(--bg-card);font-family:inherit;font-size:1rem;color:var(--text);transition:var(--transition)" autofocus onfocus="this.style.borderColor='var(--terracotta)';this.style.boxShadow='0 0 0 4px var(--terracotta-bg)'" onblur="this.style.borderColor='rgba(192,122,75,0.1)';this.style.boxShadow='none'">
+    </form>
+  </div>
+
+  @if (searched && !hasResults)
+  {
+    <div class="empty-state scroll-reveal"><div class="empty-state-icon">🔍</div><h3>لا توجد نتائج</h3><p>لم نجد نتائج لـ "@q" — جرب كلمة بحث مختلفة</p></div>
+  }
+
+  @if (!searched)
+  {
+    <div class="empty-state scroll-reveal"><div class="empty-state-icon">🔍</div><h3>ابحث عن أي شيء</h3><p>أشخاص، وظائف، مجموعات، شركات — اكتب كلمة وابحث</p></div>
+  }
+
+  @if (people.Count > 0)
+  {
+    <div class="scroll-reveal" style="font-weight:600;margin:1rem 0 0.6rem;padding-bottom:0.4rem;border-bottom:2px solid var(--terracotta-bg);display:flex;align-items:center;gap:0.4rem"><span>👤</span> أشخاص <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">@people.Count</span></div>
+    foreach (var p in people)
+    {
+      <a href="/Profile/@p.Id" class="card scroll-reveal" style="display:flex;align-items:center;gap:0.8rem;padding:0.8rem 1.1rem;margin-bottom:0.3rem;cursor:pointer">
+        <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--terracotta),var(--gold));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.1rem;flex-shrink:0">@(p.FullName?[0].ToString()??"?")</div>
+        <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:0.9rem">@p.FullName</div><div style="font-size:0.75rem;color:var(--text-muted)">@p.Headline @(p.Location != null ? "· "+p.Location : "")</div></div>
+        <span class="badge-pill">👤 شخص</span>
+      </a>
+    }
+  }
+  @if (jobs.Count > 0)
+  {
+    <div class="scroll-reveal" style="font-weight:600;margin:1rem 0 0.6rem;padding-bottom:0.4rem;border-bottom:2px solid var(--gold-bg);display:flex;align-items:center;gap:0.4rem"><span>💼</span> وظائف <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">@jobs.Count</span></div>
+    foreach (var j in jobs)
+    {
+      <a href="/Opportunities" class="card scroll-reveal" style="display:flex;align-items:center;gap:0.8rem;padding:0.8rem 1.1rem;margin-bottom:0.3rem;cursor:pointer">
+        <div style="width:48px;height:48px;border-radius:14px;background:var(--gold-bg);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">💼</div>
+        <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:0.9rem">@j.Title</div><div style="font-size:0.75rem;color:var(--text-muted)">@j.CompanyName · @j.Type · @j.Location</div></div>
+        <span class="badge-pill" style="background:var(--gold-bg);color:#8B6914;border-color:rgba(6,182,212,0.2)">💼 وظيفة</span>
+      </a>
+    }
+  }
+  @if (groups.Count > 0)
+  {
+    <div class="scroll-reveal" style="font-weight:600;margin:1rem 0 0.6rem;padding-bottom:0.4rem;border-bottom:2px solid var(--olive-bg);display:flex;align-items:center;gap:0.4rem"><span>👥</span> مجموعات <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">@groups.Count</span></div>
+    foreach (var g in groups)
+    {
+      <a href="/Groups/@g.Id" class="card scroll-reveal" style="display:flex;align-items:center;gap:0.8rem;padding:0.8rem 1.1rem;margin-bottom:0.3rem;cursor:pointer">
+        <div style="width:48px;height:48px;border-radius:14px;background:var(--olive-bg);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0">@(g.Icon??"👥")</div>
+        <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:0.9rem">@g.Name</div><div style="font-size:0.75rem;color:var(--text-muted)">@g.MemberCount أعضاء · @g.PostCount منشور</div></div>
+        <span class="badge-pill" style="background:var(--olive-bg);color:var(--olive);border-color:rgba(91,140,90,0.2)">👥 مجموعة</span>
+      </a>
+    }
+  }
+  @if (companies.Count > 0)
+  {
+    <div class="scroll-reveal" style="font-weight:600;margin:1rem 0 0.6rem;padding-bottom:0.4rem;border-bottom:2px solid rgba(26,26,46,0.08);display:flex;align-items:center;gap:0.4rem"><span>🏢</span> شركات <span style="font-weight:400;color:var(--text-muted);font-size:0.8rem">@companies.Count</span></div>
+    foreach (var c in companies)
+    {
+      <a href="/Companies/@c.Id" class="card scroll-reveal" style="display:flex;align-items:center;gap:0.8rem;padding:0.8rem 1.1rem;margin-bottom:0.3rem;cursor:pointer">
+        <div style="width:48px;height:48px;border-radius:14px;background:var(--navy);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.1rem;flex-shrink:0">@(c.Name?.Length > 0 ? c.Name[0].ToString() : "ش")</div>
+        <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:0.9rem">@c.Name</div><div style="font-size:0.75rem;color:var(--text-muted)">@c.Industry · @c.Size · @c.Location</div></div>
+        <span class="badge-pill" style="background:rgba(26,26,46,0.06);color:var(--navy)">🏢 شركة</span>
+      </a>
+    }
+  }
+</main>
+<aside class="sidebar-right">
+  <div class="card scroll-reveal"><div class="card-header"><h3>🎯 بحث سريع</h3></div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.35rem">
+      <a href="/Search?q=AI" class="skill-tag">🤖 AI/ML</a><a href="/Search?q=web" class="skill-tag">🌐 Web</a>
+      <a href="/Search?q=جونيور" class="skill-tag">🎯 جونيور</a><a href="/Search?q=remote" class="skill-tag">🏠 عن بعد</a>
+      <a href="/Search?q=القاهرة" class="skill-tag">📍 القاهرة</a><a href="/Search?q=تدريب" class="skill-tag">📚 تدريب</a>
+      <a href="/Search?q=flutter" class="skill-tag">📱 Flutter</a><a href="/Search?q=python" class="skill-tag">🐍 Python</a>
+    </div>
+  </div>
+</aside>
+</div>

@@ -1,0 +1,89 @@
+@{
+    var pending = ViewBag.Pending as List<Linkdout.Api.DTOs.ConnectionDto> ?? new();
+    var sent = ViewBag.Sent as List<Linkdout.Api.DTOs.ConnectionDto> ?? new();
+}
+<div class="app-layout" style="grid-template-columns:1fr 300px">
+<main>
+  <div class="page-header scroll-reveal">
+    <h1 class="page-title">إدارة العلاقات</h1>
+    <p class="page-subtitle">طلبات العلاقة الواردة والصادرة — اقبل أو ارفض أو تابع حالة طلباتك</p>
+  </div>
+
+  @if (pending.Count > 0)
+  {
+    <div class="scroll-reveal" style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.8rem">
+      <span style="background:var(--terracotta-bg);color:var(--terracotta);padding:0.15rem 0.6rem;border-radius:12px;font-size:0.75rem;font-weight:600">📥 @pending.Count طلب وارد</span>
+    </div>
+    foreach (var c in pending)
+    {
+      <div class="card scroll-reveal" style="display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;margin-bottom:0.5rem;border-right:3px solid var(--terracotta)" id="conn-@c.Id">
+        <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--terracotta),var(--gold));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.1rem;flex-shrink:0">@(c.User?.FullName?[0].ToString() ?? "?")</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:0.92rem">@c.User?.FullName</div>
+          <div style="font-size:0.75rem;color:var(--text-muted)">@c.User?.Headline</div>
+          <div style="font-size:0.68rem;color:var(--text-secondary);margin-top:0.15rem">منذ @(((DateTime)(c.CreatedAt)).ToString("dd MMM yyyy"))</div>
+        </div>
+        <button class="btn btn-primary" style="font-size:0.8rem;padding:0.4rem 1rem" onclick="handleAccept(@c.Id)">✅ قبول</button>
+        <button class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 1rem;color:#c0392b" onclick="handleReject(@c.Id)">✕ رفض</button>
+      </div>
+    }
+  }
+  else
+  {
+    <div class="empty-state scroll-reveal">
+      <div class="empty-state-icon">📭</div><h3>لا توجد طلبات واردة</h3><p>عندما يرسل لك أحدهم طلب علاقة، سيظهر هنا</p>
+    </div>
+  }
+
+  @if (sent.Count > 0)
+  {
+    <div class="scroll-reveal" style="margin-top:2rem">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.8rem">
+        <span style="background:var(--gold-bg);color:#8B6914;padding:0.15rem 0.6rem;border-radius:12px;font-size:0.75rem;font-weight:600">📤 @sent.Count طلب مرسل</span>
+      </div>
+      @foreach (var c in sent)
+      {
+        <div class="card scroll-reveal" style="display:flex;align-items:center;gap:1rem;padding:0.8rem 1.1rem;margin-bottom:0.3rem;opacity:0.7">
+          <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--terracotta),var(--gold));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.9rem;flex-shrink:0">@(c.User?.FullName?[0].ToString() ?? "?")</div>
+          <div style="flex:1"><div style="font-weight:500;font-size:0.85rem">@c.User?.FullName</div><div style="font-size:0.7rem;color:var(--text-muted)">@(((DateTime)(c.CreatedAt)).ToString("dd MMM yyyy"))</div></div>
+          <span class="badge-pill" style="background:var(--gold-bg);color:#8B6914">⏳ في الانتظار</span>
+        </div>
+      }
+    </div>
+  }
+</main>
+<aside class="sidebar-right">
+  <div class="card scroll-reveal">
+    <div class="card-header"><h3>📊 ملخص الطلبات</h3></div>
+    <div style="display:flex;flex-direction:column;gap:0.8rem;font-size:0.85rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0.7rem;background:var(--terracotta-bg);border-radius:10px"><span>📥 طلبات واردة</span><span style="font-family:Amiri,serif;font-weight:700;color:var(--terracotta);font-size:1.1rem">@pending.Count</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0.7rem;background:var(--gold-bg);border-radius:10px"><span>📤 طلبات مرسلة</span><span style="font-family:Amiri,serif;font-weight:700;color:#8B6914;font-size:1.1rem">@sent.Count</span></div>
+    </div>
+  </div>
+  <div class="card scroll-reveal">
+    <div class="card-header"><h3>💡 نصيحة</h3></div>
+    <p style="font-size:0.78rem;color:var(--text-secondary);line-height:1.8">قبول طلبات العلاقة بيدي الطرفين XP (+7 لكل واحد). كل ما شبكتك تكبر، كل ما مستواك يرتفع وبتظهر أكتر في اقتراحات الناس!</p>
+  </div>
+</aside>
+</div>
+
+<script>
+function handleAccept(id){
+  var card=document.getElementById('conn-'+id);
+  fetch('/api/interactions/accept/'+id,{method:'POST'})
+  .then(function(r){return r.json()})
+  .then(function(){
+    card.style.transition='all 0.3s ease';card.style.opacity='0';card.style.transform='translateX(-20px)';
+    setTimeout(function(){location.reload()},400);
+    showToast('تم قبول الطلب! +7 XP لك وللطرف الآخر 🤝');
+  }).catch(function(){showToast('خطأ في الاتصال');});
+}
+function handleReject(id){
+  fetch('/api/interactions/reject/'+id,{method:'POST'})
+  .then(function(){
+    var card=document.getElementById('conn-'+id);
+    card.style.transition='all 0.3s ease';card.style.opacity='0';card.style.transform='translateX(20px)';
+    setTimeout(function(){card.remove();showToast('تم رفض الطلب');},300);
+  }).catch(function(){showToast('خطأ في الاتصال');});
+}
+</script>

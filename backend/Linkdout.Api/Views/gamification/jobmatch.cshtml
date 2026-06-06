@@ -1,0 +1,88 @@
+@{
+    var matches = ViewBag.Matches as IEnumerable<dynamic>;
+    var userSkills = ViewBag.UserSkills as List<string> ?? new();
+}
+<div class="app-layout" style="grid-template-columns:1fr 300px">
+<main>
+  <div class="page-header scroll-reveal">
+    <h1 class="page-title">🤖 مطابقة الوظائف الذكية</h1>
+    <p class="page-subtitle">النظام بيقارن مهاراتك تلقائياً مع كل الوظائف المتاحة — كل ما النسبة أعلى كل ما كنت أقرب للقبول</p>
+  </div>
+
+  @if (userSkills.Count == 0)
+  {
+    <div class="empty-state scroll-reveal">
+      <div class="empty-state-icon">🎯</div><h3>أضف مهاراتك الأول</h3><p>علشان نقدر نقارن مهاراتك بالوظايف المتاحة، روح عدل ملفك وأضف مهاراتك</p>
+      <a href="/Profile/Edit" class="btn btn-primary" style="margin-top:1rem">✨ أضف مهارات</a>
+    </div>
+  }
+  else
+  {
+    <div class="scroll-reveal" style="margin-bottom:1.2rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+      <span style="font-size:0.82rem;color:var(--text-secondary);font-weight:500">🎯 مهاراتك:</span>
+      @foreach (var s in userSkills) { <span class="skill-tag">@s</span> }
+    </div>
+
+    if (matches == null || !((IEnumerable<dynamic>)matches).Any())
+    {
+      <div class="empty-state scroll-reveal"><div class="empty-state-icon">📭</div><h3>لا توجد وظائف متاحة حالياً</h3><p>ارجع تاني قريب — بنضيف وظايف جديدة باستمرار</p></div>
+    }
+    else
+    {
+      int i = 0;
+      foreach (var m in matches)
+      {
+        i++;
+        var score = (int)m.MatchScore;
+        var scoreLevel = score >= 80 ? "high" : score >= 50 ? "medium" : "low";
+        var matchSkills = m.MatchingSkills as List<string> ?? new();
+        var missSkills = m.MissingSkills as List<string> ?? new();
+        var j = m.Job;
+        <div class="match-card scroll-reveal" style="animation-delay:@(i*0.05)s">
+          <div style="display:flex;align-items:flex-start;gap:1rem">
+            <div style="text-align:center;min-width:64px">
+              <div style="width:56px;height:56px;border-radius:16px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid @(score>=80?"var(--olive)":score>=50?"var(--gold)":"var(--terracotta)")">
+                <div style="font-family:Amiri,serif;font-weight:700;font-size:1.15rem;color:var(--terracotta)">@score%</div>
+                <div style="font-size:0.55rem;color:var(--text-muted)">تطابق</div>
+              </div>
+              <div style="margin-top:0.3rem"><span class="match-score @scoreLevel">@(scoreLevel=="high"?"🔥 ممتاز":scoreLevel=="medium"?"👍 جيد":"👌 مقبول")</span></div>
+            </div>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:0.95rem;color:var(--text)">@j.Title</div>
+              <div style="font-size:0.78rem;color:var(--text-secondary);margin:0.2rem 0 0.4rem">
+                <span style="display:inline-flex;align-items:center;gap:0.2rem">🏢 @j.CompanyName</span>
+                <span style="margin:0 0.5rem;color:var(--text-muted)">·</span>
+                <span>@j.Type</span>
+                @if (!string.IsNullOrEmpty((string)j.Location)) { <span style="margin:0 0.5rem;color:var(--text-muted)">·</span><span>📍 @j.Location</span> }
+              </div>
+              <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:0.3rem">
+                @foreach (var s in matchSkills) { <span style="padding:0.15rem 0.5rem;border-radius:8px;font-size:0.65rem;background:var(--olive-bg);color:var(--olive);border:1px solid rgba(91,140,90,0.15)">✅ @s</span> }
+                @foreach (var s in missSkills) { <span style="padding:0.15rem 0.5rem;border-radius:8px;font-size:0.65rem;background:rgba(220,53,69,0.06);color:#c0392b;border:1px solid rgba(220,53,69,0.1)">⚠️ @s</span> }
+              </div>
+              @if (missSkills.Count > 0)
+              {
+                <div style="font-size:0.72rem;color:var(--terracotta);margin-top:0.3rem;background:var(--terracotta-bg);padding:0.4rem 0.6rem;border-radius:8px;line-height:1.6">
+                  💡 ناقصك: <strong>@string.Join("، ", missSkills)</strong> — تعلّمهم يزود فرصك لـ <strong>@(Math.Min(100, score + missSkills.Count * 15))%</strong>
+                </div>
+              }
+            </div>
+            <button class="btn btn-outline ripple" style="font-size:0.78rem;flex-shrink:0" onclick="event.stopPropagation()">📨 تقديم</button>
+          </div>
+        </div>
+      }
+    }
+  }
+</main>
+<aside class="sidebar-right">
+  <div class="card scroll-reveal">
+    <div class="card-header"><h3>🤖 إزاي بيشتغل؟</h3></div>
+    <p style="font-size:0.8rem;color:var(--text-secondary);line-height:1.9">بناخد المهارات اللي في ملفك الشخصي، ونقارنها بالمهارات المطلوبة لكل وظيفة متاحة. كل ما عدد المهارات المتطابقة يزيد، النسبة بتعلى. بنحسب كمان الموقع الجغرافي ومجال شغلك عشان ندي نتايج أدق.</p>
+    <div style="margin-top:0.8rem;display:flex;flex-direction:column;gap:0.4rem">
+      <div style="display:flex;align-items:center;gap:0.3rem;font-size:0.72rem;color:var(--olive)"><span>🟢</span> 80%+ — تطابق ممتاز، قدم فوراً</div>
+      <div style="display:flex;align-items:center;gap:0.3rem;font-size:0.72rem;color:#B0802A"><span>🟡</span> 50–79% — تطابق جيد، فرصة قوية</div>
+      <div style="display:flex;align-items:center;gap:0.3rem;font-size:0.72rem;color:var(--terracotta)"><span>🟠</span> أقل من 50% — محتاج تطور مهاراتك</div>
+    </div>
+  </div>
+  <a href="/Jobs/Match" class="btn btn-primary" style="width:100%;justify-content:center">🔄 تحديث المطابقة</a>
+</aside>
+</div>

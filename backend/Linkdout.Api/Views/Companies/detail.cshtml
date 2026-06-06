@@ -1,0 +1,56 @@
+@{
+    var c = ViewBag.Company as Linkdout.Api.DTOs.CompanyDto;
+    var jobs = ViewBag.Jobs as List<Linkdout.Api.DTOs.JobDto> ?? new();
+}
+<div class="app-layout" style="grid-template-columns:1fr 300px">
+<main>
+  <div class="scroll-reveal" style="margin-bottom:1.5rem">
+    <div style="width:100%;height:200px;border-radius:var(--radius-lg);background:linear-gradient(135deg,#1E1B4B 0%,#3B1F5E 40%,#5B21B6 100%);position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 60%,rgba(6,182,212,0.15) 0%,transparent 50%)"></div>
+    </div>
+    <div style="display:flex;align-items:flex-end;margin-top:-45px">
+      <div style="width:90px;height:90px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700;border:5px solid var(--bg);box-shadow:var(--shadow-lg);background:var(--bg-card);margin-right:1.5rem;color:var(--terracotta);font-family:Amiri,serif">@(c?.Name?.Length > 0 ? c.Name[0].ToString() : "ش")</div>
+      <div style="padding-bottom:0.5rem">
+        <h1 style="font-size:1.6rem;font-family:Amiri,serif">@c?.Name</h1>
+        <p style="color:var(--text-muted);font-size:0.85rem">@c?.Industry</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card scroll-reveal" style="margin-bottom:1.5rem">
+    <p style="color:var(--text-secondary);line-height:2;font-size:0.9rem">@(c?.Description ?? "لا يوجد وصف متاح.")</p>
+    <div style="display:flex;gap:2rem;margin-top:1.2rem;font-size:0.82rem;color:var(--text-muted);flex-wrap:wrap">
+      @if(!string.IsNullOrEmpty(c?.Location)){<span>📍 @c.Location</span>}
+      @if(!string.IsNullOrEmpty(c?.Size)){<span>👥 @c.Size</span>}
+      @if(!string.IsNullOrEmpty(c?.Website)){<a href="@c.Website" target="_blank" style="color:var(--terracotta)">🌐 @c.Website</a>}
+    </div>
+  </div>
+
+  <div class="scroll-reveal">
+    <h3 style="font-size:1.1rem;margin-bottom:0.8rem;padding-bottom:0.5rem;border-bottom:2px solid var(--terracotta-bg);display:flex;align-items:center;gap:0.4rem"><span>💼</span> وظائف مفتوحة <span style="font-weight:400;font-size:0.8rem;color:var(--text-muted);margin-right:auto">@jobs.Count</span></h3>
+    @if (jobs.Count == 0) { <div class="empty-state" style="padding:2rem"><div class="empty-state-icon">📭</div><h3>لا توجد وظائف حالياً</h3><p style="font-size:0.8rem">لم تعلن هذه الشركة عن وظائف بعد</p></div> }
+    else
+    {
+      foreach (var j in jobs)
+      {
+        <div class="card scroll-reveal" style="display:flex;align-items:center;gap:1rem;padding:0.9rem 1.1rem;margin-bottom:0.4rem">
+          <div class="exp-icon" style="font-size:1.2rem">@(j.Type=="internship"?"🎓":j.Type=="part-time"?"⏰":"💼")</div>
+          <div style="flex:1"><div style="font-weight:600;font-size:0.9rem">@j.Title</div><div style="font-size:0.75rem;color:var(--text-muted)">@j.Type · @j.Location</div></div>
+          <button class="btn btn-outline" style="font-size:0.75rem;padding:0.3rem 0.9rem" onclick="event.stopPropagation();showToast('تم تسجيل اهتمامك! ✓')">📨 تقديم</button>
+        </div>
+      }
+    }
+  </div>
+</main>
+<aside class="sidebar-right">
+  <div class="card scroll-reveal"><div class="card-header"><h3>🏢 معلومات الشركة</h3></div>
+    <div style="display:flex;flex-direction:column;gap:0.6rem;font-size:0.82rem;color:var(--text-secondary)">
+      @if(!string.IsNullOrEmpty(c?.Location)){<div>📍 @c.Location</div>}
+      @if(!string.IsNullOrEmpty(c?.Size)){<div>👥 @c.Size موظف</div>}
+      @if(!string.IsNullOrEmpty(c?.Website)){<a href="@c.Website" target="_blank" style="color:var(--terracotta)">🌐 الموقع الإلكتروني</a>}
+      <div>👥 @(c?.FollowerCount ?? 0) متابع</div>
+      <div>💼 @jobs.Count وظيفة مفتوحة</div>
+    </div>
+  </div>
+</aside>
+</div>

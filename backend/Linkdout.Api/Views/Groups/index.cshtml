@@ -1,0 +1,46 @@
+@{
+    var groups = ViewBag.Groups as List<Linkdout.Api.DTOs.GroupDto> ?? new();
+    var colors = new[]{"linear-gradient(135deg,var(--navy) 0%,#3B1F5E 50%,var(--terracotta) 100%)","linear-gradient(135deg,var(--olive) 0%,#6EE7B7 50%,#34D399 100%)","linear-gradient(135deg,#F59E0B 0%,var(--gold) 50%,#7C3AED 100%)","linear-gradient(135deg,#5B21B6 0%,var(--terracotta) 50%,var(--terracotta-light) 100%)","linear-gradient(135deg,#3D1F2F 0%,#6B3A5A 50%,var(--terracotta) 100%)","linear-gradient(135deg,var(--navy) 0%,#3D4570 50%,#5A7A9A 100%)"};
+}
+<div class="app-layout" style="grid-template-columns:1fr 300px">
+<main>
+  <div class="page-header scroll-reveal">
+    <h1 class="page-title">المجموعات</h1>
+    <p class="page-subtitle">انضم لمجموعات مهنية، شارك المعرفة، ووسع دايرة معارفك</p>
+  </div>
+  @if (groups.Count == 0)
+  {
+    <div class="empty-state scroll-reveal"><div class="empty-state-icon">👥</div><h3>لا توجد مجموعات بعد</h3><p>لم يتم إنشاء أي مجموعة حتى الآن</p></div>
+  }
+  else
+  {
+    <div class="groups-grid">
+    @for (int i = 0; i < groups.Count; i++)
+    {
+      var g = groups[i];
+      <div class="group-card scroll-reveal" onclick="location.href='/Groups/@g.Id'">
+        <div class="group-cover" style="background:@colors[i%6]">
+          <div class="group-avatar">@(g.Icon ?? "👥")</div>
+        </div>
+        <div class="group-body">
+          <div class="group-name">@g.Name</div>
+          <div class="group-desc">@g.Description</div>
+          <div style="display:flex;gap:1rem;font-size:0.72rem;color:var(--text-secondary);margin-top:0.4rem">
+            <span>👥 @g.MemberCount عضو</span><span>💬 @g.PostCount منشور</span>
+          </div>
+        </div>
+      </div>
+    }
+    </div>
+  }
+</main>
+<aside class="sidebar-right">
+  <div class="card scroll-reveal"><div class="card-header"><h3>🏆 الأكثر نشاطاً</h3></div>
+    @foreach(var g in groups.OrderByDescending(x=>x.PostCount).Take(4)){
+      <div style="display:flex;align-items:center;gap:0.6rem;padding:0.5rem;border-radius:10px;cursor:pointer;transition:var(--transition)" onclick="location.href='/Groups/@g.Id'" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+        <span style="font-size:1.2rem">@(g.Icon??"👥")</span><div style="flex:1"><div style="font-size:0.82rem;font-weight:500">@g.Name</div><div style="font-size:0.7rem;color:var(--text-muted)">@g.PostCount منشور</div></div>
+      </div>
+    }
+  </div>
+</aside>
+</div>

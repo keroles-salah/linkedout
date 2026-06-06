@@ -1,0 +1,300 @@
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "لوحة التحكم";
+}
+<link href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" rel="preload" as="script">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+:root { --sidebar-w: 260px; }
+.admin-layout { display: flex; min-height: calc(100vh - 60px); }
+.admin-sidebar {
+  width: var(--sidebar-w); min-width: var(--sidebar-w);
+  background: var(--bg-card); border-left: 1px solid var(--border-subtle);
+  padding: 1rem 0; position: sticky; top: 60px; height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+.admin-sidebar .logo { padding: 0.5rem 1.5rem 1.5rem; border-bottom: 1px solid var(--border-subtle); margin-bottom: 0.8rem; }
+.admin-sidebar .logo h2 { font-family: Amiri, serif; font-size: 1.3rem; color: var(--primary); margin: 0; }
+.admin-sidebar .logo span { font-size: 0.7rem; color: var(--text-muted); }
+.admin-nav a {
+  display: flex; align-items: center; gap: 0.7rem; padding: 0.7rem 1.5rem;
+  color: var(--text-secondary); text-decoration: none; font-size: 0.88rem;
+  transition: var(--transition); border-right: 3px solid transparent;
+}
+.admin-nav a:hover, .admin-nav a.active {
+  background: linear-gradient(90deg, rgba(124,58,237,0.08), transparent);
+  color: var(--primary); border-right-color: var(--primary);
+}
+.admin-nav a .icon { font-size: 1.1rem; width: 22px; text-align: center; }
+.admin-nav .badge-count { margin-right: auto; background: var(--primary); color: #fff; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 10px; }
+.admin-main { flex: 1; padding: 1.5rem 2rem; overflow-x: hidden; }
+.admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.admin-header h1 { font-family: Amiri, serif; font-size: 1.6rem; color: var(--text); margin: 0; }
+.admin-header .time { font-size: 0.82rem; color: var(--text-muted); }
+
+/* Stats Grid */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.stat-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius);
+  padding: 1.2rem; position: relative; overflow: hidden;
+  transition: var(--transition);
+}
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.stat-card .stat-icon {
+  position: absolute; left: 1rem; top: 1rem; font-size: 2rem; opacity: 0.15;
+}
+.stat-card .stat-value { font-size: 2rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; }
+.stat-card .stat-label { font-size: 0.82rem; color: var(--text-muted); }
+.stat-card .stat-change { font-size: 0.72rem; margin-top: 0.3rem; }
+.stat-card .stat-change.up { color: var(--emerald); }
+.stat-card .stat-change.down { color: var(--rose); }
+.stat-card.accent { border-top: 3px solid var(--primary); }
+.stat-card.accent2 { border-top: 3px solid var(--accent); }
+.stat-card.rose { border-top: 3px solid var(--rose); }
+.stat-card.emerald { border-top: 3px solid var(--emerald); }
+
+/* Charts Row */
+.charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.chart-card {
+  background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius);
+  padding: 1.2rem;
+}
+.chart-card h3 { font-family: Amiri, serif; font-size: 1.1rem; margin: 0 0 1rem; color: var(--text); }
+.chart-card canvas { max-height: 300px; }
+
+/* Tables */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.data-table th {
+  text-align: right; padding: 0.7rem 0.8rem; background: var(--bg);
+  color: var(--text-muted); font-weight: 600; font-size: 0.75rem;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border-subtle);
+}
+.data-table td {
+  padding: 0.7rem 0.8rem; border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+.data-table tr:hover td { background: rgba(124,58,237,0.03); }
+.data-table .user-cell { display: flex; align-items: center; gap: 0.6rem; }
+.data-table .user-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 0.85rem; font-family: Amiri, serif;
+}
+.badge-role { font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 8px; font-weight: 600; }
+.badge-role.admin { background: rgba(124,58,237,0.15); color: var(--primary); }
+.badge-role.user { background: rgba(6,182,212,0.1); color: var(--accent); }
+.badge-status { font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 8px; }
+.badge-status.active { background: rgba(16,185,129,0.1); color: var(--emerald); }
+.badge-status.inactive { background: rgba(244,63,94,0.1); color: var(--rose); }
+
+.btn-sm { padding: 0.3rem 0.6rem; font-size: 0.72rem; border-radius: 6px; }
+.btn-ghost { background: transparent; border: 1px solid var(--border-subtle); color: var(--text-secondary); cursor: pointer; transition: var(--transition); }
+.btn-ghost:hover { background: var(--bg); border-color: var(--primary); color: var(--primary); }
+.btn-danger { background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.2); color: var(--rose); cursor: pointer; }
+.btn-danger:hover { background: var(--rose); color: #fff; }
+
+/* Search/Filter Bar */
+.filter-bar { display: flex; gap: 0.8rem; margin-bottom: 1.2rem; flex-wrap: wrap; align-items: center; }
+.filter-bar input, .filter-bar select {
+  padding: 0.5rem 0.8rem; border-radius: 8px; border: 1px solid var(--border-subtle);
+  background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.85rem;
+}
+.filter-bar input:focus, .filter-bar select:focus { border-color: var(--primary); outline: none; }
+.filter-bar input { min-width: 250px; }
+
+/* Pagination */
+.pagination { display: flex; gap: 0.3rem; justify-content: center; margin-top: 1.5rem; }
+.pagination a, .pagination span {
+  padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.8rem;
+  text-decoration: none; border: 1px solid var(--border-subtle); color: var(--text-secondary);
+  transition: var(--transition);
+}
+.pagination a:hover { border-color: var(--primary); color: var(--primary); }
+.pagination .current { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* Toast */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--bg-card); border: 1px solid var(--border-accent); padding: 0.7rem 1.5rem; border-radius: 12px; box-shadow: var(--shadow-xl); font-size: 0.85rem; color: var(--text); z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+.toast.show { opacity: 1; }
+
+@@media (max-width: 768px) {
+  .admin-sidebar { display: none; }
+  .charts-row { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="logo">
+      <h2>🦊 Linkdout</h2>
+      <span>لوحة تحكم الأدمن</span>
+    </div>
+    <nav class="admin-nav">
+      <a href="/Admin" class="active"><span class="icon">📊</span> الإحصائيات</a>
+      <a href="/Admin/Users"><span class="icon">👥</span> المستخدمين <span class="badge-count">@ViewBag.TotalUsers</span></a>
+      <a href="/Admin/Posts"><span class="icon">📝</span> المنشورات</a>
+      <a href="/Admin/Analytics"><span class="icon">📈</span> التحليلات</a>
+      <a href="/" style="margin-top:1rem;border-top:1px solid var(--border-subtle);padding-top:1rem"><span class="icon">🏠</span> العودة للمنصة</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1>📊 لوحة التحكم</h1>
+      <span class="time" id="admin-clock"></span>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="stats-grid">
+      <div class="stat-card accent">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value" id="stat-users">@ViewBag.TotalUsers</div>
+        <div class="stat-label">إجمالي المستخدمين</div>
+        <div class="stat-change up">+@ViewBag.NewUsersToday اليوم</div>
+      </div>
+      <div class="stat-card accent2">
+        <div class="stat-icon">📝</div>
+        <div class="stat-value" id="stat-posts">@ViewBag.TotalPosts</div>
+        <div class="stat-label">إجمالي المنشورات</div>
+        <div class="stat-change up">+@ViewBag.NewPostsToday اليوم</div>
+      </div>
+      <div class="stat-card emerald">
+        <div class="stat-icon">💬</div>
+        <div class="stat-value">@ViewBag.TotalComments</div>
+        <div class="stat-label">التعليقات</div>
+      </div>
+      <div class="stat-card rose">
+        <div class="stat-icon">🤝</div>
+        <div class="stat-value">@ViewBag.TotalConnections</div>
+        <div class="stat-label">العلاقات</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value">@ViewBag.TotalGroups</div>
+        <div class="stat-label">المجموعات</div>
+      </div>
+      <div class="stat-card accent2">
+        <div class="stat-icon">🏢</div>
+        <div class="stat-value">@ViewBag.TotalCompanies</div>
+        <div class="stat-label">الشركات</div>
+      </div>
+      <div class="stat-card emerald">
+        <div class="stat-icon">💼</div>
+        <div class="stat-value">@ViewBag.TotalJobs</div>
+        <div class="stat-label">الوظائف</div>
+      </div>
+      <div class="stat-card rose">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-value" id="stat-active">@ViewBag.ActiveUsers</div>
+        <div class="stat-label">مستخدمين نشطين</div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="charts-row">
+      <div class="chart-card">
+        <h3>📈 نمو المستخدمين (آخر 30 يوم)</h3>
+        <canvas id="growthChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>⚡ توزيع الـ XP</h3>
+        <canvas id="xpChart"></canvas>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <h3>📊 النشاط اليومي (آخر 14 يوم)</h3>
+        <canvas id="postsChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>🏆 أكثر المستخدمين XP</h3>
+        <canvas id="topUsersChart"></canvas>
+      </div>
+    </div>
+
+    <!-- RECENT USERS -->
+    <div class="chart-card" style="margin-bottom:1.5rem">
+      <h3>👥 أحدث المستخدمين</h3>
+      <table class="data-table">
+        <thead><tr><th>المستخدم</th><th>البريد</th><th>الدور</th><th>الحالة</th><th>التسجيل</th></tr></thead>
+        <tbody>
+        @foreach (dynamic u in ViewBag.RecentUsers)
+        {
+          <tr>
+            <td><div class="user-cell"><div class="user-avatar">@(u.FullName?.ToString()?[0] ?? "?")</div>@u.FullName</div></td>
+            <td>@u.Email</td>
+            <td><span class="badge-role @u.Role">@(u.Role == "admin" ? "أدمن" : "مستخدم")</span></td>
+            <td><span class="badge-status @(u.IsActive.ToString().ToLower() == "true" ? "active" : "inactive")">@(u.IsActive.ToString().ToLower() == "true" ? "نشط" : "معطل")</span></td>
+            <td>@u.CreatedAt.ToString("yyyy/MM/dd")</td>
+          </tr>
+        }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RECENT POSTS -->
+    <div class="chart-card">
+      <h3>📝 أحدث المنشورات</h3>
+      <table class="data-table">
+        <thead><tr><th>الكاتب</th><th>المحتوى</th><th>👍</th><th>💬</th><th>التاريخ</th></tr></thead>
+        <tbody>
+        @foreach (dynamic p in ViewBag.RecentPosts)
+        {
+          <tr>
+            <td>@p.Author</td>
+            <td>@(p.Body?.ToString().Length > 80 ? p.Body.ToString().Substring(0, 80) + "..." : p.Body)</td>
+            <td>@p.LikeCount</td>
+            <td>@p.CommentCount</td>
+            <td>@p.CreatedAt.ToString("yyyy/MM/dd")</td>
+          </tr>
+        }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </main>
+</div>
+
+<script>
+// Clock
+function updateClock(){document.getElementById('admin-clock').textContent=new Date().toLocaleString('ar-EG',{weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'})}
+updateClock();setInterval(updateClock,30000);
+
+// Charts
+Chart.defaults.font.family='Inter, Amiri, sans-serif';
+Chart.defaults.color='#94a3b8';
+
+function createChart(id,type,labels,data,color,bgColor){
+  var ctx=document.getElementById(id).getContext('2d');
+  new Chart(ctx,{type:type,data:{labels:labels,datasets:[{data:data,borderColor:color,backgroundColor:bgColor||color+'20',borderWidth:2,fill:true,tension:0.3,pointRadius:0,pointHitRadius:10}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(148,163,184,0.1)'}}}}});
+}
+
+function createDoughnut(id,labels,data,colors){
+  var ctx=document.getElementById(id).getContext('2d');
+  new Chart(ctx,{type:'doughnut',data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderWidth:0}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:16,usePointStyle:true}}}}});
+}
+
+function createBar(id,labels,data,color){
+  var ctx=document.getElementById(id).getContext('2d');
+  new Chart(ctx,{type:'bar',data:{labels:labels,datasets:[{data:data,backgroundColor:color,borderRadius:6}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},indexAxis:'y',scales:{x:{grid:{display:false}},y:{grid:{display:false}}}}});
+}
+
+// Load chart data
+fetch('/api/admin/charts').then(r=>r.json()).then(d=>{
+  createChart('growthChart','line',d.growth.labels,d.growth.data,'#7C3AED');
+  createChart('xpChart','doughnut',d.xp.labels,d.xp.data,['#7C3AED','#06B6D4','#10B981','#F59E0B','#F43F5E']);
+  createChart('postsChart','line',d.posts.labels,d.posts.data,'#06B6D4');
+  createBar('topUsersChart',d.topUsers.labels,d.topUsers.data,'#7C3AED');
+});
+
+// Toast
+function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
+</script>

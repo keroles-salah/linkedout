@@ -1,0 +1,41 @@
+@{
+    var jobs = ViewBag.Jobs as List<Linkdout.Api.DTOs.JobDto> ?? new();
+}
+<div class="app-layout" style="grid-template-columns:1fr 300px">
+<main>
+  <div class="page-header scroll-reveal">
+    <h1 class="page-title">الفرص</h1>
+    <p class="page-subtitle">فرص مصممة للجونيورز والمبتدئين — @jobs.Count فرصة متاحة</p>
+  </div>
+  @if (jobs.Count == 0) { <div class="empty-state scroll-reveal"><div class="empty-state-icon">💼</div><h3>لا توجد فرص حالياً</h3><p>لم يتم إضافة فرص عمل بعد</p></div> }
+  else {
+    @for (int i = 0; i < jobs.Count; i++)
+    {
+      var j = jobs[i];
+      <div class="card scroll-reveal" style="display:flex;align-items:flex-start;gap:1rem;padding:1.1rem 1.3rem;margin-bottom:0.5rem">
+        <div class="exp-icon" style="font-size:1.4rem;width:52px;height:52px">@(j.Type=="internship"?"🎓":j.Type=="part-time"?"⏰":"💼")</div>
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:0.95rem">@j.Title</div>
+          <div style="color:var(--text-secondary);font-size:0.82rem">🏢 @j.CompanyName</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.15rem">@j.Type · @j.Location</div>
+          @if (!string.IsNullOrEmpty(j.Description)) { <div style="font-size:0.78rem;color:var(--text-secondary);margin-top:0.4rem;line-height:1.7">@j.Description</div> }
+        </div>
+        <button class="btn btn-outline" style="font-size:0.78rem;flex-shrink:0" onclick="event.stopPropagation();showToast('تم التقديم! ✓')">📨 تقديم</button>
+      </div>
+    }
+  }
+</main>
+<aside class="sidebar-right">
+  <div class="card scroll-reveal"><div class="card-header"><h3>🎯 تصفية</h3></div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.3rem">
+      <span class="skill-tag">💼 دوام كامل</span><span class="skill-tag">⏰ دوام جزئي</span>
+      <span class="skill-tag">🎓 تدريب</span><span class="skill-tag">🏠 عن بعد</span>
+      <span class="skill-tag">📍 القاهرة</span><span class="skill-tag">📍 أسيوط</span>
+    </div>
+  </div>
+  <div class="card scroll-reveal"><div class="card-header"><h3>🤖 جرب المطابقة</h3></div>
+    <p style="font-size:0.78rem;color:var(--text-secondary);line-height:1.7">شوف إيه الوظائف الأنسب ليك بناءً على مهاراتك — بنقارن مهاراتك بكل وظيفة ونطلعلك نسبة تطابق</p>
+    <a href="/Jobs/Match" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:0.5rem">🔍 طابق وظيفة</a>
+  </div>
+</aside>
+</div>
