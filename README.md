@@ -1,300 +1,320 @@
 
 <p align="center">
-  <img src="logo.svg" width="80" alt="Linkdout Logo" />
+  <img src="logo.svg" width="90" alt="Linkdout Logo" />
 </p>
 
 <h1 align="center">Linkdout</h1>
 
 <p align="center">
-  <b>شبكتك المهنية — بالمصري 🇪🇬</b>
+  <b>Your Professional Network — Built from Scratch 💼</b>
 </p>
 
 <p align="center">
-  منصة احترافية مبنية عربي × RTL بالكامل، مستوحاة من LinkedIn. <br/>
-  مش مجرد clone — ده LinkedIn بنكهة مصرية، تصميم دافيء، و backend قوي.
+  A full‑stack professional networking platform inspired by LinkedIn.<br/>
+  Fully RTL Arabic interface, warm design system, and a real <b>ASP.NET Core backend</b>.
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/status-active-brightgreen?style=flat-square" alt="Status" />
   <img src="https://img.shields.io/badge/lang-Arabic%20(RTL)-C27B4F?style=flat-square" alt="Language" />
-  <img src="https://img.shields.io/badge/backend-C%23%20ASP.NET%20Core%209-blueviolet?style=flat-square" alt="Backend" />
-  <img src="https://img.shields.io/badge/frontend-HTML5%20%2B%20CSS3%20%2B%20JS-orange?style=flat-square" alt="Frontend" />
-  <img src="https://img.shields.io/badge/database-MySQL%208-00758F?style=flat-square" alt="Database" />
+  <img src="https://img.shields.io/badge/backend-C%23%20ASP.NET%20Core%209-512BD4?style=flat-square&logo=.net" alt="Backend" />
+  <img src="https://img.shields.io/badge/frontend-HTML5%20%2B%20CSS3%20%2B%20JS-E34F26?style=flat-square&logo=html5" alt="Frontend" />
+  <img src="https://img.shields.io/badge/database-MySQL%208-4479A1?style=flat-square&logo=mysql" alt="Database" />
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License" />
 </p>
 
 ---
 
-## 📸 لقطات من المشروع
+## 📸 Screenshots
 
 <p align="center">
-  <img src="screenshot-hero.png" alt="Linkdout Homepage" width="800" />
+  <img src="screenshot-hero.png" alt="Homepage Hero" width="800" />
 </p>
 
 <p align="center">
-  <em>الصفحة الرئيسية — RTL بالكامل، شريط التنقل، Feed، بروفايل، فرص، واقتراحات</em>
+  <em>Homepage — RTL layout, sticky navbar, profile card, feed, and sidebars</em>
 </p>
 
 <p align="center">
-  <img src="screenshot.png" alt="Linkdout Full Page" width="800" />
+  <img src="screenshot-feed.png" alt="Post Feed" width="800" />
 </p>
 
 <p align="center">
-  <em>الصفحة كاملة — التصميم الثلاثي الأعمدة وتفاصيل المنشورات والدوائر</em>
+  <em>Post feed — composer, interactions (like · comment · share), and tags</em>
+</p>
+
+<p align="center">
+  <img src="screenshot-posts.png" alt="Posts & Engagement" width="800" />
+</p>
+
+<p align="center">
+  <em>Multiple posts with engagement — likes, comments, and sharing</em>
+</p>
+
+<details>
+<summary>📸 More screenshots (click to expand)</summary>
+
+<p align="center">
+  <img src="screenshot-full.png" alt="Full Page" width="800" />
+  <br/><em>Full-page view — three‑column layout</em>
+</p>
+
+<p align="center">
+  <img src="screenshot-profile.png" alt="Profile Section" width="800" />
+  <br/><em>Profile card — cover photo, avatar, stats, status badges, circles</em>
+</p>
+
+<p align="center">
+  <img src="screenshot-more.png" alt="Lower Feed" width="800" />
+  <br/><em>Extended feed — more posts and right‑sidebar opportunities</em>
+</p>
+
+</details>
+
+---
+
+## 🧠 What Is This?
+
+**Linkdout** is a real full‑stack professional networking platform — not a tutorial project.  
+It lets you build your network, share achievements, find job opportunities, and connect with peers — all through a fully Arabic, right‑to‑left interface.
+
+---
+
+## 🛠️ Tech Stack
+
+<p align="center">
+
+| Layer | Technology |
+|:-----:|:-----------|
+| **Language** | C# 13 |
+| **Framework** | ASP.NET Core 9 (MVC + Web API) |
+| **Auth** | JWT + Cookie‑based dual authentication |
+| **ORM** | Entity Framework Core |
+| **Database** | MySQL 8 |
+| **Caching** | Output Cache + Brotli/Gzip Compression |
+| **API Style** | RESTful · JSON camelCase |
+
+</p>
+
+<p align="center">
+
+| Layer | Technology |
+|:-----:|:-----------|
+| **Markup** | HTML5 (semantic) |
+| **Styling** | CSS3 — custom design system, zero frameworks |
+| **Scripting** | Vanilla JavaScript (AJAX, DOM) |
+| **Direction** | Full RTL — every element right‑to‑left |
+| **Fonts** | Amiri · Noto Naskh Arabic · Playfair Display |
+| **Layout** | CSS Grid — responsive 3‑column |
+
 </p>
 
 ---
 
-## 🧠 الفكرة
+## ✨ Features
 
-**Linkdout** هو منصة تواصل مهني (Professional Network) معمولة من الصفر — مش مجرد تمارين. الهدف إنك تبني شبكة علاقاتك، تشارك إنجازاتك، تلاقي فرص شغل، وتتواصل مع ناس في مجالك — وكل ده بواجهة عربية 100% واتجاه RTL.
+### 🔐 Authentication
+- ✅ Login with **JWT + Cookies** (dual auth)
+- ✅ Registration — name, email, password, avatar
+- ✅ Protected routes with `[Authorize]` attributes
+- ✅ Secure password hashing
 
-المشروع معمول كـ **full-stack application** حقيقي:
-- **Frontend**: Single-page app بـ HTML/CSS/JS — فيه بوستات، تعليقات، إعجابات، بروفايلات، سيرش، وإشعارات
-- **Backend**: ASP.NET Core 9 Web API — JWT Auth + Cookies، MySQL، Response Compression، Output Caching
-- **Admin Panel**: لوحة تحكم كاملة لإدارة المستخدمين والمحتوى
+### 👤 Profile
+- ✅ Custom gradient cover photo
+- ✅ Avatar with border & shadow
+- ✅ Stats: followers · posts · connections
+- ✅ Status badges: "Open to Work" 🟢 · "Currently Learning" 🟡
+- ✅ Bio · headline · skills
 
----
+### 📝 Posts & Feed
+- ✅ **Create posts** — text + image + hashtags
+- ✅ **Quick composer** — write directly from the feed
+- ✅ **Like ❤️ · Comment 💬 · Share 🔄**
+- ✅ **Tag system** — categorize posts
+- ✅ Inline post images
 
-## 🛠️ التقنيات (Tech Stack)
+### 🔵 Circles
+- ✅ Interest‑based groups (friends · learning · professional)
+- ✅ Member count per circle
+- ✅ Circle‑specific content
 
-### Backend
-| المكون | التقنية |
-|--------|---------|
-| Language | C# 13 |
-| Framework | ASP.NET Core 9 (MVC + Web API) |
-| Authentication | JWT + Cookie-based dual auth |
-| ORM | Entity Framework Core |
-| Database | MySQL 8 |
-| Caching | Output Cache + Response Compression (Brotli + Gzip) |
-| API Style | RESTful with JSON camelCase |
+### 💼 Opportunities
+- ✅ Job listings with company name · title · details
+- ✅ Filter and search opportunities
 
-### Frontend
-| المكون | التقنية |
-|--------|---------|
-| Markup | HTML5 (Semantic) |
-| Styling | CSS3 — Custom Design System، بدون frameworks |
-| JavaScript | Vanilla JS — AJAX، DOM manipulation |
-| Direction | **RTL بالكامل** — كل حاجة من اليمين للشمال |
-| Fonts | Amiri, Noto Naskh Arabic, Playfair Display, Lora |
-| Layout | CSS Grid — 3-column responsive |
+### 🏢 Companies
+- ✅ Company profiles
+- ✅ Open positions per company
+- ✅ Follow companies
 
----
+### 🔍 Search
+- ✅ **Live search** in the navbar
+- ✅ Results across posts · people · companies
 
-## ✨ المميزات (Features)
+### 🔔 Notifications
+- ✅ Unread badge counter
+- ✅ Like & comment notifications
+- ✅ Connection requests
 
-### 🔐 المصادقة والأمان
-- ✅ **تسجيل دخول** بالـ JWT + Cookies (dual authentication)
-- ✅ **تسجيل حساب جديد** — اسم، إيميل، كلمة مرور، صورة
-- ✅ **حماية الصفحات** — Authorization على الـ Controllers
-- ✅ **Password hashing** — Secure storage
+### 👥 Network
+- ✅ **Suggested people** to connect with
+- ✅ **Connect** button with mutual connections count
 
-### 👤 الملف الشخصي (Profile)
-- ✅ Cover photo gradient مخصص
-- ✅ Avatar مع border و shadow
-- ✅ إحصائيات: المتابعين، المنشورات، العلاقات
-- ✅ Status badge: "متاح للعمل" 🟢 أو "يتعلم حالياً" 🟡
-- ✅ Bio، headline، skills
-
-### 📝 المنشورات (Posts)
-- ✅ **إنشاء منشور** — نص + صورة + هاشتاجات
-- ✅ **Composer** — شريط كتابة سريع من الـ feed
-- ✅ **إعجاب ❤️ + تعليق 💬 + مشاركة 🔄**
-- ✅ **Tags system** — تصنيف المنشورات
-- ✅ صور في المنشورات مع lazy loading
-
-### 🔵 الدوائر (Circles)
-- ✅ مجموعات حسب الاهتمام (قريب، تعلم، مهني)
-- ✅ عدد الأعضاء في كل دائرة
-- ✅ تفاعل مع محتوى الدائرة
-
-### 💼 الفرص الوظيفية (Opportunities)
-- ✅ قائمة بالوظائف والفرص
-- ✅ اسم الشركة، المسمى الوظيفي، التفاصيل
-- ✅ فلترة وسيرش في الفرص
-
-### 🏢 الشركات (Companies)
-- ✅ ملفات تعريفية للشركات
-- ✅ الوظائف المتاحة في كل شركة
-- ✅ متابعة الشركات
-
-### 🔍 البحث (Search)
-- ✅ **Live search** في الـ navbar
-- ✅ بحث في المنشورات، الأشخاص، الشركات
-- ✅ نتائج فورية
-
-### 🔔 الإشعارات (Notifications)
-- ✅ Badge بعدد الإشعارات الجديدة
-- ✅ إشعارات الإعجابات والتعليقات
-- ✅ طلبات الصداقة
-
-### 👥 شبكة العلاقات (Network)
-- ✅ **اقتراحات أشخاص** — Suggested connections
-- ✅ **إضافة صديق** — Connect button
-- ✅ عدد العلاقات المشتركة
-
-### 🛡️ لوحة التحكم (Admin Panel)
-- ✅ إدارة المستخدمين
-- ✅ إدارة المنشورات والمحتوى
-- ✅ إحصائيات الموقع
-- ✅ Seed data تلقائي
+### 🛡️ Admin Panel
+- ✅ User management
+- ✅ Content moderation
+- ✅ Site analytics
+- ✅ Auto‑seed data on first run
 
 ---
 
-## 🏗️ هيكل المشروع
+## 🏗️ Project Structure
 
 ```
 linkedout/
-├── index.html                    # ⭐ Main SPA — 80KB frontend كامل
-├── .gitignore
+├── index.html                    # ⭐ Main SPA — 80 KB frontend
+├── logo.svg                      # Brand logo
 ├── README.md
+├── screenshot-*.png              # Screenshots
+├── .gitignore
 │
 └── backend/
-    ├── _test.js                  # اختبار الاتصال
-    ├── add_admin_cols.py         # Migration scripts
+    ├── add_admin_cols.py         # DB migration helpers
     ├── add_cols2.py
     ├── add_cols3.py
     │
     └── Linkdout.Api/             # ASP.NET Core Web API
-        ├── Program.cs            # Entry point + DI + Middleware
+        ├── Program.cs            # Entry point · DI · middleware
         ├── Linkdout.Api.csproj   # Project file (net9.0)
-        ├── appsettings.json      # Config + ConnectionStrings
-        ├── appsettings.Development.json
+        ├── appsettings.json      # Config + connection strings
         │
-        ├── Controllers/          # API + MVC Controllers
+        ├── Controllers/          # API + MVC controllers
         ├── Models/               # Entity models
-        ├── Data/                 # DbContext + Seed data
-        ├── Views/                # Razor Views (MVC)
-        │   ├── Account/          # Login / Register / Profile
-        │   ├── Admin/            # Admin Dashboard
-        │   ├── Circles/          # Circles management
+        ├── Data/                 # DbContext + seed data
+        ├── Views/                # Razor views
+        │   ├── Account/          # Login · Register · Profile
+        │   ├── Admin/            # Admin dashboard
+        │   ├── Circles/          # Circles
         │   ├── Companies/        # Company pages
         │   ├── Groups/           # Groups
-        │   ├── Home/             # Feed الرئيسية
+        │   ├── Home/             # Main feed
         │   ├── Opportunities/    # Job listings
         │   ├── Profile/          # User profiles
         │   ├── Search/           # Search results
-        │   └── Shared/           # Layouts + Partials
+        │   └── Shared/           # Layouts + partials
         │
-        └── wwwroot/              # Static files (CSS, JS, images)
+        └── wwwroot/              # Static files
 ```
 
 ---
 
-## 🚀 تشغيل المشروع
+## 🎨 Design System
 
-### المتطلبات
+<p align="center">
+
+| Token | Color | Usage |
+|:-----:|:-----:|:------|
+| **Terracotta** | `#C27B4F` | Primary · links · accents |
+| **Gold** | `#E8B960` | Highlights · badges |
+| **Olive** | `#5B8C5A` | Success · "Open to Work" |
+| **Navy** | `#1A1A2E` | Dark elements |
+| **Cream** | `#FBFAF7` | Page background |
+| **Warm Gray** | `#F5F0EB` | Cards |
+
+</p>
+
+- **Zero frameworks** — pure CSS with custom properties
+- **Three‑column CSS Grid**: profile (280 px) · feed (flexible) · sidebar (300 px)
+- **Responsive** with smooth transitions and backdrop blur
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 - [MySQL 8](https://dev.mysql.com/downloads/mysql/)
-- أي متصفح حديث (Chrome, Firefox, Edge)
+- Any modern browser
 
-### خطوات التشغيل
+### Run It
 
 ```bash
-# 1. انسخ الـ repo
+# 1. Clone
 git clone https://github.com/keroles-salah/linkedout.git
 cd linkedout
 
-# 2. اضبط الـ Connection String
-# عدل الملف: backend/Linkdout.Api/appsettings.json
-# حط بيانات الـ MySQL بتاعتك
+# 2. Configure your MySQL connection string
+# Edit: backend/Linkdout.Api/appsettings.json
 
-# 3. شغّل الـ Backend
+# 3. Run the backend
 cd backend/Linkdout.Api
 dotnet run
 
-# 4. افتح المتصفح
-# الرابط هيظهر في التيرمينال — غالباً:
-# https://localhost:5001
-# http://localhost:5000
+# 4. Open your browser
+# Usually: https://localhost:5001  or  http://localhost:5000
 ```
 
-> **ملاحظة:** قاعدة البيانات بتتعمل تلقائياً (Auto-migrate + Seed) — مش محتاج تعمل حاجة.
+> The database is auto‑created on first run (EF Core `EnsureCreated` + seed data). No manual migrations needed.
 
-### الـ frontend منفصل
-
-الـ `index.html` في root الـ repo هو تطبيق frontend مستقل — تقدر تفتحه مباشرة في المتصفح، أو تحطه في `wwwroot` بتاع الـ backend عشان يشتغل مع الـ API سوا.
+The root `index.html` is a standalone frontend — you can open it directly in a browser or serve it from the backend's `wwwroot`.
 
 ---
 
-## 🎨 التصميم (Design System)
+## 📊 Code Stats
 
-التصميم معمول بـ **custom design system** — مفيش Bootstrap ولا Tailwind:
+<p align="center">
 
-| العنصر | القيمة |
-|--------|--------|
-| Primary | Terracotta `#C27B4F` |
-| Secondary | Gold `#E8B960` |
-| Accent | Olive `#5B8C5A` |
-| Dark | Navy `#1A1A2E` |
-| Background | Cream `#FBFAF7` |
-| Cards | Warm Gray `#F5F0EB` |
-| Fonts | Amiri (عناوين) + Noto Naskh Arabic (نصوص) |
-| Direction | **RTL** (من اليمين للشمال) |
+| Language | Lines (approx.) |
+|:--------:|:---------------:|
+| HTML | ~2,500 |
+| CSS (inline) | ~1,200 |
+| JavaScript (inline) | ~1,000 |
+| C# (backend) | ~1,400 |
+| Python | ~150 |
+| **Total** | **~5,250** |
 
-الـ layout بيستخدم CSS Grid تلات أعمدة:
-- **اليمين (280px):** بروفايل + دوائر
-- **الوسط (flexible):** Feed + منشورات
-- **الشمال (300px):** فرص + اقتراحات
-
----
-
-## 📊 إحصائيات الكود
-
-```
-Language         Files       Lines
-──────────────────────────────────
-HTML                1        ~2,500
-CSS          (inline)        ~1,200
-JavaScript   (inline)        ~1,000
-C# (Backend)        12+      ~1,400
-Python               3         ~150
-──────────────────────────────────
-Total                        5,250+
-```
-
-> الأرقام تقريبية — الـ `index.html` 80KB لوحده بكل الـ CSS والـ JS inline.
+</p>
 
 ---
 
 ## 🗺️ Roadmap
 
-- [ ] **Real-time notifications** — SignalR WebSocket
-- [ ] **Messaging/Chat** — Real-time messaging system
-- [ ] **Post images upload** — Cloud storage integration
-- [ ] **Endorsements & Skills** — LinkedIn-style endorsements
-- [ ] **Mobile App** — React Native or MAUI
-- [ ] **AI Recommendations** — Job/connection recommendations
-- [ ] **Dark Mode** — 🌙
-- [ ] **Deployment** — Deploy to Azure / Railway
+- [ ] **Real‑time notifications** — SignalR WebSocket
+- [ ] **Direct messaging** — Real‑time chat
+- [ ] **Image upload** — Cloud storage integration
+- [ ] **Endorsements & skills** — LinkedIn‑style skill endorsements
+- [ ] **Mobile app** — React Native or .NET MAUI
+- [ ] **AI recommendations** — Smart job & connection matching
+- [ ] **Dark mode** — 🌙
+- [ ] **Deployment** — Azure / Railway
 
 ---
 
-## 👨‍💻 المطور
+## 👨‍💻 Developer
 
 <p align="center">
-  <b>كيرلس صلاح فخري</b> (Keroles Salah Fakhry)
+  <b>Keroles Salah Fakhry</b>
 </p>
 
 <p align="center">
   <a href="https://keroles-sala.me"><img src="https://img.shields.io/badge/Portfolio-keroles--sala.me-C27B4F?style=for-the-badge" alt="Portfolio" /></a>
   <a href="https://github.com/keroles-salah"><img src="https://img.shields.io/badge/GitHub-keroles--salah-181717?style=for-the-badge&logo=github" alt="GitHub" /></a>
-  <a href="https://www.linkedin.com/in/kerolessalah05/"><img src="https://img.shields.io/badge/LinkedIn-kerolessalah05-0A66C2?style=for-the-badge&logo=linkedin" alt="LinkedIn" /></a>
+  <a href="https://www.linkedin.com/in/kerolessalah05/"><img src="https://img.shields.io/badge/LinkedIn-Keroles%20Salah-0A66C2?style=for-the-badge&logo=linkedin" alt="LinkedIn" /></a>
   <a href="https://www.youtube.com/@kerlssalah"><img src="https://img.shields.io/badge/YouTube-@kerlssalah-FF0000?style=for-the-badge&logo=youtube" alt="YouTube" /></a>
 </p>
 
 <p align="center">
-  طالب Computer Science في Assiut National University<br/>
-  مهتم بـ AI، Problem Solving، وبناء منتجات رقمية مفيدة<br/>
+  Computer Science student at Assiut National University<br/>
+  Passionate about AI, problem solving, and building useful digital products<br/>
   <em>"Turning complex problems into elegant solutions."</em>
 </p>
 
 ---
 
-## 📝 License
+## 📄 License
 
-MIT — حر في الاستخدام والتعديل والنشر. بس لو استفدت من المشروع، اعمله ⭐ على GitHub.
+MIT — free to use, modify, and share. If this project helps you, drop a ⭐!
 
 ---
 
