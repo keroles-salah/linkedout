@@ -27,46 +27,83 @@
 
 ## 📸 Screenshots
 
+### 🏠 Home Feed
+
 <p align="center">
-  <img src="screenshot-hero.png" alt="Homepage Hero" width="800" />
+  <img src="screenshot-hero.png" alt="Home Feed" width="800" />
 </p>
 
 <p align="center">
-  <em>Homepage — RTL layout, sticky navbar, profile card, feed, and sidebars</em>
+  <em>Main feed — navbar, post composer, real posts with likes · comments · shares</em>
 </p>
 
 <p align="center">
-  <img src="screenshot-feed.png" alt="Post Feed" width="800" />
+  <img src="screenshot-feed.png" alt="Feed Scrolled" width="800" />
 </p>
 
 <p align="center">
-  <em>Post feed — composer, interactions (like · comment · share), and tags</em>
+  <em>Scrolling through the feed — posts with images, tags, and engagement</em>
+</p>
+
+### 👤 Profile Page
+
+<p align="center">
+  <img src="screenshot-profile.png" alt="User Profile" width="800" />
 </p>
 
 <p align="center">
-  <img src="screenshot-posts.png" alt="Posts & Engagement" width="800" />
+  <em>User profile — cover photo, avatar, stats (followers · posts · connections), status badges, circles</em>
+</p>
+
+### 💼 Opportunities & Companies
+
+<p align="center">
+  <img src="screenshot-opportunities.png" alt="Job Opportunities" width="800" />
+  <br/><em>Job listings — company name, title, location, and details</em>
 </p>
 
 <p align="center">
-  <em>Multiple posts with engagement — likes, comments, and sharing</em>
+  <img src="screenshot-companies.png" alt="Companies" width="800" />
+  <br/><em>Company profiles — follow, open positions, company details</em>
+</p>
+
+### 🔵 Circles
+
+<p align="center">
+  <img src="screenshot-circles.png" alt="Circles" width="800" />
+  <br/><em>Interest‑based circles — friends, learning, professional groups</em>
+</p>
+
+### 🔍 Search
+
+<p align="center">
+  <img src="screenshot-search.png" alt="Search Results" width="800" />
+  <br/><em>Live search — results across posts, people, and companies</em>
+</p>
+
+### 🛡️ Admin Panel
+
+<p align="center">
+  <img src="screenshot-admin.png" alt="Admin Dashboard" width="800" />
+  <br/><em>Admin dashboard — user management, analytics, content moderation</em>
 </p>
 
 <details>
 <summary>📸 More screenshots (click to expand)</summary>
 
 <p align="center">
-  <img src="screenshot-full.png" alt="Full Page" width="800" />
-  <br/><em>Full-page view — three‑column layout</em>
-</p>
-
-<p align="center">
-  <img src="screenshot-profile.png" alt="Profile Section" width="800" />
-  <br/><em>Profile card — cover photo, avatar, stats, status badges, circles</em>
+  <img src="screenshot-posts.png" alt="More Posts" width="800" />
+  <br/><em>Extended feed — more posts with interactions</em>
 </p>
 
 <p align="center">
   <img src="screenshot-more.png" alt="Lower Feed" width="800" />
-  <br/><em>Extended feed — more posts and right‑sidebar opportunities</em>
+  <br/><em>Lower section — additional posts and sidebar content</em>
+</p>
+
+<p align="center">
+  <img src="screenshot-full.png" alt="Full Page" width="800" />
+  <br/><em>Full‑page view — complete three‑column layout</em>
 </p>
 
 </details>
@@ -94,10 +131,6 @@ It lets you build your network, share achievements, find job opportunities, and 
 | **Caching** | Output Cache + Brotli/Gzip Compression |
 | **API Style** | RESTful · JSON camelCase |
 
-</p>
-
-<p align="center">
-
 | Layer | Technology |
 |:-----:|:-----------|
 | **Markup** | HTML5 (semantic) |
@@ -117,7 +150,7 @@ It lets you build your network, share achievements, find job opportunities, and 
 - ✅ Login with **JWT + Cookies** (dual auth)
 - ✅ Registration — name, email, password, avatar
 - ✅ Protected routes with `[Authorize]` attributes
-- ✅ Secure password hashing
+- ✅ Secure password hashing (BCrypt)
 
 ### 👤 Profile
 - ✅ Custom gradient cover photo
