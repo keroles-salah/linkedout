@@ -30,7 +30,7 @@
 ### 🏠 Home Feed
 
 <p align="center">
-  <img src="screenshot-hero.png" alt="Home Feed" width="800" />
+  <img src="screenshots/screenshot-hero.png" alt="Home Feed" width="800" />
 </p>
 
 <p align="center">
@@ -38,7 +38,7 @@
 </p>
 
 <p align="center">
-  <img src="screenshot-feed.png" alt="Feed Scrolled" width="800" />
+  <img src="screenshots/screenshot-feed.png" alt="Feed Scrolled" width="800" />
 </p>
 
 <p align="center">
@@ -48,7 +48,7 @@
 ### 👤 Profile Page
 
 <p align="center">
-  <img src="screenshot-profile.png" alt="User Profile" width="800" />
+  <img src="screenshots/screenshot-profile.png" alt="User Profile" width="800" />
 </p>
 
 <p align="center">
@@ -58,33 +58,33 @@
 ### 💼 Opportunities & Companies
 
 <p align="center">
-  <img src="screenshot-opportunities.png" alt="Job Opportunities" width="800" />
+  <img src="screenshots/screenshot-opportunities.png" alt="Job Opportunities" width="800" />
   <br/><em>Job listings — company name, title, location, and details</em>
 </p>
 
 <p align="center">
-  <img src="screenshot-companies.png" alt="Companies" width="800" />
+  <img src="screenshots/screenshot-companies.png" alt="Companies" width="800" />
   <br/><em>Company profiles — follow, open positions, company details</em>
 </p>
 
 ### 🔵 Circles
 
 <p align="center">
-  <img src="screenshot-circles.png" alt="Circles" width="800" />
+  <img src="screenshots/screenshot-circles.png" alt="Circles" width="800" />
   <br/><em>Interest‑based circles — friends, learning, professional groups</em>
 </p>
 
 ### 🔍 Search
 
 <p align="center">
-  <img src="screenshot-search.png" alt="Search Results" width="800" />
+  <img src="screenshots/screenshot-search.png" alt="Search Results" width="800" />
   <br/><em>Live search — results across posts, people, and companies</em>
 </p>
 
 ### 🛡️ Admin Panel
 
 <p align="center">
-  <img src="screenshot-admin.png" alt="Admin Dashboard" width="800" />
+  <img src="screenshots/screenshot-admin.png" alt="Admin Dashboard" width="800" />
   <br/><em>Admin dashboard — user management, analytics, content moderation</em>
 </p>
 
@@ -92,17 +92,17 @@
 <summary>📸 More screenshots (click to expand)</summary>
 
 <p align="center">
-  <img src="screenshot-posts.png" alt="More Posts" width="800" />
+  <img src="screenshots/screenshot-posts.png" alt="More Posts" width="800" />
   <br/><em>Extended feed — more posts with interactions</em>
 </p>
 
 <p align="center">
-  <img src="screenshot-more.png" alt="Lower Feed" width="800" />
+  <img src="screenshots/screenshot-more.png" alt="Lower Feed" width="800" />
   <br/><em>Lower section — additional posts and sidebar content</em>
 </p>
 
 <p align="center">
-  <img src="screenshot-full.png" alt="Full Page" width="800" />
+  <img src="screenshots/screenshot-full.png" alt="Full Page" width="800" />
   <br/><em>Full‑page view — complete three‑column layout</em>
 </p>
 
@@ -208,7 +208,7 @@ linkedout/
 ├── index.html                    # ⭐ Main SPA — 80 KB frontend
 ├── logo.svg                      # Brand logo
 ├── README.md
-├── screenshot-*.png              # Screenshots
+├── screenshots/                # App screenshots
 ├── .gitignore
 │
 └── backend/
