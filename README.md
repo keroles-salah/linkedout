@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/keroles-salah/linkedout/master/backend/Linkdout.Api/wwwroot/logo.svg" width="80" alt="Linkdout Logo" />
+  <img src="logo.svg" width="80" alt="Linkdout Logo" />
 </p>
 
 <h1 align="center">Linkdout</h1>
