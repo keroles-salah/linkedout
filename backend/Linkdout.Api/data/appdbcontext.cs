@@ -19,6 +19,7 @@ public class AppDbContext : DbContext
     public DbSet<Job> Jobs => Set<Job>();
     public DbSet<XpTransaction> XpTransactions => Set<XpTransaction>();
     public DbSet<PostBookmark> PostBookmarks => Set<PostBookmark>();
+    public DbSet<Notification> Notifications => Set<Notification>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
