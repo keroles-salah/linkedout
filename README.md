@@ -25,13 +25,23 @@
 
 ---
 
-## 📸 لقطة من المشروع
+## 📸 لقطات من المشروع
 
 <p align="center">
-  <em>⬆️ الصفحة الرئيسية — Feed + بروفايل + فرص</em>
+  <img src="screenshot-hero.png" alt="Linkdout Homepage" width="800" />
 </p>
 
-> **ملاحظة:** حط سكرين شوت من المشروع هنا عشان الـ README يبقى أقوى. ارفع صورة `screenshot.png` في الـ repo وعدل المسار.
+<p align="center">
+  <em>الصفحة الرئيسية — RTL بالكامل، شريط التنقل، Feed، بروفايل، فرص، واقتراحات</em>
+</p>
+
+<p align="center">
+  <img src="screenshot.png" alt="Linkdout Full Page" width="800" />
+</p>
+
+<p align="center">
+  <em>الصفحة كاملة — التصميم الثلاثي الأعمدة وتفاصيل المنشورات والدوائر</em>
+</p>
 
 ---
 
